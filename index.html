@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Steganography Vault</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --text-primary: #e8e8ed;
+            --text-secondary: #9494a8;
+            --text-muted: #5c5c6e;
+            --accent-primary: #00d4aa;
+            --accent-secondary: #00b894;
+            --accent-glow: rgba(0, 212, 170, 0.3);
+            --warning: #ffc107;
+            --error: #ff6b6b;
+            --success: #00d4aa;
+            --border: #2a2a3a;
+            --border-hover: #3a3a4a;
+            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            --gradient-2: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --shadow-glow: 0 0 40px rgba(0, 212, 170, 0.15);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #eef1f5;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #8888a0;
+            --accent-primary: #00a884;
+            --accent-secondary: #008f6b;
+            --accent-glow: rgba(0, 168, 132, 0.2);
+            --border: #e0e4ea;
+            --border-hover: #c8cdd4;
+            --shadow-glow: 0 4px 20px rgba(0, 168, 132, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 1rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+        }
+
+        /* Mode Tabs */
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mode-tab {
+            padding: 1rem 2.5rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mode-tab:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .mode-tab.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .mode-tab .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title .icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-tertiary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 212, 170, 0.05);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 212, 170, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-zone.has-image {
+            padding: 1rem;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .upload-text strong {
+            color: var(--accent-primary);
+        }
+
+        .upload-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .upload-zone.has-image .image-preview {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .upload-zone.has-image .upload-content {
+            display: none;
+        }
+
+        .image-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .image-info.visible {
+            display: block;
+        }
+
+        .image-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .image-info-label {
+            color: var(--text-muted);
+        }
+
+        .image-info-value {
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .capacity-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .capacity-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Text Input */
+        .text-input-wrapper {
+            margin-top: 1.5rem;
+        }
+
+        .text-input-wrapper label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .char-count.warning {
+            color: var(--warning);
+        }
+
+        .char-count.error {
+            color: var(--error);
+        }
+
+        /* Password Input */
+        .password-wrapper {
+            margin-top: 1.5rem;
+        }
+
+        .password-wrapper label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .password-input-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .password-field {
+            flex: 1;
+            position: relative;
+        }
+
+        .password-field input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        .password-field input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .btn-generate {
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-generate:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .password-strength {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .strength-bar {
+            width: 40px;
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .strength-bar.weak { background: var(--error); }
+        .strength-bar.medium { background: var(--warning); }
+        .strength-bar.strong { background: var(--success); }
+
+        .strength-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--accent-glow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+        }
+
+        .result-section.visible {
+            display: block;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-item {
+            text-align: center;
+        }
+
+        .comparison-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-item img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .decoded-text {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 212, 170, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+        }
+
+        .info-panel-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-list li::before {
+            content: '✓';
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--error); }
+        .toast.warning { border-color: var(--warning); }
+
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .loading-overlay.visible {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--bg-tertiary);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        /* Canvas (hidden) */
+        #canvas {
+            display: none;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .mode-tabs {
+                flex-direction: column;
+            }
+
+            .mode-tab {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .comparison-view {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .password-input-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Binary Visualization */
+        .binary-viz {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            display: none;
+        }
+
+        .binary-viz.visible {
+            display: block;
+        }
+
+        .binary-bit {
+            display: inline-block;
+            padding: 2px 4px;
+            margin: 1px;
+            border-radius: 3px;
+        }
+
+        .binary-bit.zero {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--error);
+        }
+
+        .binary-bit.one {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--success);
+        }
+
+        /* Pixel Preview */
+        .pixel-preview {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .pixel-preview.visible {
+            display: grid;
+        }
+
+        .pixel {
+            aspect-ratio: 1;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .pixel.modified::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Processing...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-fill" id="loadingProgress"></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">🔐</div>
+                <h1>Steganography Vault</h1>
+            </div>
+            <p class="subtitle">
+                이미지 속에 비밀 메시지를 숨기고, AES-256 암호화로 안전하게 보호하세요.
+                모든 처리는 브라우저에서 이루어져 서버로 전송되지 않습니다.
+            </p>
+        </header>
+
+        <div class="mode-tabs">
+            <button class="mode-tab active" data-mode="encode">
+                <span class="icon">📥</span>
+                <span>메시지 숨기기 (Encode)</span>
+            </button>
+            <button class="mode-tab" data-mode="decode">
+                <span class="icon">📤</span>
+                <span>메시지 추출 (Decode)</span>
+            </button>
+        </div>
+
+        <div class="main-content">
+            <!-- Left Panel: Image Upload -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🖼️</span>
+                    이미지 선택
+                </div>
+
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">
+                            <strong>클릭</strong>하거나 이미지를 <strong>드래그</strong>하세요
+                        </div>
+                        <div class="upload-hint">PNG, JPEG, WebP 지원 (최대 10MB)</div>
+                    </div>
+                    <img class="image-preview" id="imagePreview" alt="Preview">
+                </div>
+
+                <div class="image-info" id="imageInfo">
+                    <div class="image-info-row">
+                        <span class="image-info-label">파일명</span>
+                        <span class="image-info-value" id="fileName">-</span>
+                    </div>
+                    <div class="image-info-row">
+                        <span class="image-info-label">크기</span>
+                        <span class="image-info-value" id="fileSize">-</span>
+                    </div>
+                    <div class="image-info-row">
+                        <span class="image-info-label">해상도</span>
+                        <span class="image-info-value" id="resolution">-</span>
+                    </div>
+                    <div class="image-info-row">
+                        <span class="image-info-label">저장 용량</span>
+                        <span class="image-info-value" id="capacity">-</span>
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" id="capacityFill"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="clearImage" style="margin-top: 1rem; display: none; width: 100%;">
+                    🗑️ 이미지 제거
+                </button>
+            </div>
+
+            <!-- Right Panel: Text & Password -->
+            <div class="card">
+                <div id="encodePanel">
+                    <div class="card-title">
+                        <span class="icon">✏️</span>
+                        숨길 메시지
+                    </div>
+
+                    <div class="text-input-wrapper">
+                        <label for="secretText">비밀 메시지 입력</label>
+                        <textarea 
+                            id="secretText" 
+                            placeholder="여기에 숨기고 싶은 메시지를 입력하세요...&#10;&#10;이 메시지는 AES-256으로 암호화된 후 이미지 픽셀에 숨겨집니다."
+                        ></textarea>
+                        <div class="char-count" id="charCount">0 / <span id="maxChars">0</span> 문자</div>
+                    </div>
+
+                    <div class="password-wrapper">
+                        <label>암호화 키 (비밀번호)</label>
+                        <div class="password-input-group">
+                            <div class="password-field">
+                                <input type="password" id="encodePassword" placeholder="암호화에 사용할 키 입력...">
+                                <button class="password-toggle" id="toggleEncodePassword">👁️</button>
+                            </div>
+                            <button class="btn-generate" id="generateKey" title="랜덤 키 생성">🎲</button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bars">
+                                <div class="strength-bar" id="str1"></div>
+                                <div class="strength-bar" id="str2"></div>
+                                <div class="strength-bar" id="str3"></div>
+                                <div class="strength-bar" id="str4"></div>
+                            </div>
+                            <span class="strength-text" id="strengthText">-</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="encodeBtn" disabled>
+                            🔒 메시지 숨기기
+                        </button>
+                    </div>
+                </div>
+
+                <div id="decodePanel" style="display: none;">
+                    <div class="card-title">
+                        <span class="icon">🔓</span>
+                        메시지 추출
+                    </div>
+
+                    <div class="password-wrapper">
+                        <label>복호화 키 (비밀번호)</label>
+                        <div class="password-input-group">
+                            <div class="password-field">
+                                <input type="password" id="decodePassword" placeholder="암호화 시 사용한 키 입력...">
+                                <button class="password-toggle" id="toggleDecodePassword">👁️</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="decodeBtn" disabled>
+                            🔓 메시지 추출하기
+                        </button>
+                    </div>
+
+                    <div class="result-section" id="decodeResult">
+                        <div class="result-header">
+                            <span class="result-title">
+                                ✅ 추출된 메시지
+                            </span>
+                            <button class="btn btn-secondary" id="copyDecoded" style="padding: 0.5rem 1rem;">
+                                📋 복사
+                            </button>
+                        </div>
+                        <div class="decoded-text" id="decodedText"></div>
+                    </div>
+                </div>
+
+                <!-- Encode Result -->
+                <div class="result-section" id="encodeResult">
+                    <div class="result-header">
+                        <span class="result-title">
+                            ✅ 인코딩 완료
+                        </span>
+                    </div>
+                    <div class="comparison-view">
+                        <div class="comparison-item">
+                            <div class="comparison-label">원본 이미지</div>
+                            <img id="originalCompare" alt="Original">
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">스테가노 이미지</div>
+                            <img id="encodedCompare" alt="Encoded">
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="downloadBtn">
+                            💾 이미지 다운로드
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <div class="info-panel-title">
+                💡 보안 정보
+            </div>
+            <ul class="info-list">
+                <li>모든 암호화 및 스테가노그래피 처리는 브라우저 내에서 이루어집니다</li>
+                <li>이미지나 메시지가 서버로 전송되지 않아 완벽한 프라이버시를 보장합니다</li>
+                <li>AES-256 암호화로 메시지를 보호하며, 올바른 키 없이는 복호화가 불가능합니다</li>
+                <li>PNG 포맷은 무손실 압축이므로 데이터가 손상되지 않습니다</li>
+                <li>JPEG로 업로드하면 자동으로 PNG로 변환되어 저장됩니다</li>
+            </ul>
+        </div>
+
+        <!-- How It Works -->
+        <div class="how-it-works">
+            <h2>🔬 작동 원리</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">메시지 암호화</div>
+                    <div class="step-desc">AES-256 알고리즘으로 메시지를 암호화합니다. 암호화된 데이터는 키 없이 해독 불가능합니다.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">이진 변환</div>
+                    <div class="step-desc">암호화된 텍스트를 이진수(0과 1)로 변환하여 이미지에 저장할 준비를 합니다.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">LSB 삽입</div>
+                    <div class="step-desc">각 픽셀 RGB 값의 최하위 비트(LSB)를 수정하여 데이터를 숨깁니다. 이 변화는 육안으로 구분 불가능합니다.</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">PNG 저장</div>
+                    <div class="step-desc">무손실 PNG 포맷으로 저장하여 숨겨진 데이터가 손상되지 않도록 보장합니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <a href="https://github.com/answndud/Steganography" target="_blank">View on GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // 🔐 Steganography Vault - Main Application
+        // ============================================
+
+        // Constants
+        const DELIMITER = '###STEGO_END###';
+        const HEADER_LENGTH = 32; // bits for storing data length
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+        // State
+        let currentImage = null;
+        let originalImageData = null;
+        let encodedImageDataURL = null;
+        let currentMode = 'encode';
+
+        // DOM Elements
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const uploadZone = document.getElementById('uploadZone');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageInfo = document.getElementById('imageInfo');
+        const clearImageBtn = document.getElementById('clearImage');
+        const secretText = document.getElementById('secretText');
+        const charCount = document.getElementById('charCount');
+        const maxCharsSpan = document.getElementById('maxChars');
+        const encodePassword = document.getElementById('encodePassword');
+        const decodePassword = document.getElementById('decodePassword');
+        const encodeBtn = document.getElementById('encodeBtn');
+        const decodeBtn = document.getElementById('decodeBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const encodeResult = document.getElementById('encodeResult');
+        const decodeResult = document.getElementById('decodeResult');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const loadingProgress = document.getElementById('loadingProgress');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // ============================================
+        // Theme Management
+        // ============================================
+        function initTheme() {
+            const savedTheme = localStorage.getItem('stego-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('stego-theme', next);
+            updateThemeIcon(next);
+        }
+
+        function updateThemeIcon(theme) {
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
+
+        // ============================================
+        // Mode Switching
+        // ============================================
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentMode = tab.dataset.mode;
+                
+                document.getElementById('encodePanel').style.display = currentMode === 'encode' ? 'block' : 'none';
+                document.getElementById('decodePanel').style.display = currentMode === 'decode' ? 'block' : 'none';
+                encodeResult.classList.remove('visible');
+                decodeResult.classList.remove('visible');
+                
+                updateButtonState();
+            });
+        });
+
+        // ============================================
+        // Image Upload & Handling
+        // ============================================
+        uploadZone.addEventListener('click', () => imageInput.click());
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageUpload(file);
+            }
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+        });
+
+        clearImageBtn.addEventListener('click', () => {
+            clearImage();
+        });
+
+        function handleImageUpload(file) {
+            if (file.size > MAX_FILE_SIZE) {
+                showToast('파일 크기가 10MB를 초과합니다.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    imagePreview.src = e.target.result;
+                    uploadZone.classList.add('has-image');
+                    clearImageBtn.style.display = 'block';
+                    
+                    // Update canvas
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    
+                    // Update image info
+                    updateImageInfo(file, img);
+                    encodeResult.classList.remove('visible');
+                    decodeResult.classList.remove('visible');
+                    
+                    updateButtonState();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearImage() {
+            currentImage = null;
+            originalImageData = null;
+            encodedImageDataURL = null;
+            imagePreview.src = '';
+            uploadZone.classList.remove('has-image');
+            clearImageBtn.style.display = 'none';
+            imageInfo.classList.remove('visible');
+            imageInput.value = '';
+            encodeResult.classList.remove('visible');
+            decodeResult.classList.remove('visible');
+            updateButtonState();
+        }
+
+        function updateImageInfo(file, img) {
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatBytes(file.size);
+            document.getElementById('resolution').textContent = `${img.width} × ${img.height}`;
+            
+            // Calculate capacity: each pixel can store 3 bits (RGB), but we use only ~70% to be safe
+            const totalPixels = img.width * img.height;
+            const bitsAvailable = Math.floor(totalPixels * 3 * 0.7);
+            const bytesAvailable = Math.floor(bitsAvailable / 8);
+            const charsAvailable = Math.floor(bytesAvailable / 4); // UTF-8 can be up to 4 bytes per char
+            
+            document.getElementById('capacity').textContent = `~${formatBytes(bytesAvailable)} (약 ${charsAvailable.toLocaleString()}자)`;
+            maxCharsSpan.textContent = charsAvailable.toLocaleString();
+            
+            imageInfo.classList.add('visible');
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // ============================================
+        // Text Input Handling
+        // ============================================
+        secretText.addEventListener('input', () => {
+            const length = secretText.value.length;
+            const max = parseInt(maxCharsSpan.textContent.replace(/,/g, '')) || 0;
+            
+            charCount.textContent = `${length.toLocaleString()} / ${maxCharsSpan.textContent} 문자`;
+            
+            if (max > 0) {
+                const percentage = (length / max) * 100;
+                document.getElementById('capacityFill').style.width = `${Math.min(percentage, 100)}%`;
+                
+                charCount.classList.remove('warning', 'error');
+                if (percentage > 90) {
+                    charCount.classList.add('error');
+                } else if (percentage > 70) {
+                    charCount.classList.add('warning');
+                }
+            }
+            
+            updateButtonState();
+        });
+
+        // ============================================
+        // Password Handling
+        // ============================================
+        document.getElementById('toggleEncodePassword').addEventListener('click', () => {
+            togglePasswordVisibility(encodePassword, document.getElementById('toggleEncodePassword'));
+        });
+
+        document.getElementById('toggleDecodePassword').addEventListener('click', () => {
+            togglePasswordVisibility(decodePassword, document.getElementById('toggleDecodePassword'));
+        });
+
+        function togglePasswordVisibility(input, button) {
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        encodePassword.addEventListener('input', () => {
+            updatePasswordStrength(encodePassword.value);
+            updateButtonState();
+        });
+
+        decodePassword.addEventListener('input', updateButtonState);
+
+        function updatePasswordStrength(password) {
+            const bars = [
+                document.getElementById('str1'),
+                document.getElementById('str2'),
+                document.getElementById('str3'),
+                document.getElementById('str4')
+            ];
+            const strengthText = document.getElementById('strengthText');
+            
+            // Reset
+            bars.forEach(bar => bar.className = 'strength-bar');
+            
+            if (!password) {
+                strengthText.textContent = '-';
+                return;
+            }
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            const levels = ['', 'weak', 'weak', 'medium', 'strong', 'strong'];
+            const texts = ['', '매우 약함', '약함', '보통', '강함', '매우 강함'];
+            
+            for (let i = 0; i < Math.min(strength, 4); i++) {
+                bars[i].classList.add(levels[strength]);
+            }
+            strengthText.textContent = texts[strength];
+        }
+
+        // Generate Random Key
+        document.getElementById('generateKey').addEventListener('click', () => {
+            const array = new Uint8Array(16);
+            window.crypto.getRandomValues(array);
+            const key = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+            encodePassword.value = key;
+            encodePassword.type = 'text';
+            document.getElementById('toggleEncodePassword').textContent = '🙈';
+            updatePasswordStrength(key);
+            updateButtonState();
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(key).then(() => {
+                showToast('랜덤 키가 생성되어 클립보드에 복사되었습니다!', 'success');
+            });
+        });
+
+        // ============================================
+        // Button State Management
+        // ============================================
+        function updateButtonState() {
+            const hasImage = currentImage !== null;
+            const hasText = secretText.value.trim().length > 0;
+            const hasEncodePassword = encodePassword.value.length > 0;
+            const hasDecodePassword = decodePassword.value.length > 0;
+            
+            encodeBtn.disabled = !(hasImage && hasText && hasEncodePassword);
+            decodeBtn.disabled = !(hasImage && hasDecodePassword);
+        }
+
+        // ============================================
+        // LSB Steganography Implementation
+        // ============================================
+
+        /**
+         * Convert string to binary representation
+         * @param {string} str - Input string
+         * @returns {string} - Binary string
+         */
+        function stringToBinary(str) {
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(str);
+            let binary = '';
+            for (const byte of bytes) {
+                binary += byte.toString(2).padStart(8, '0');
+            }
+            return binary;
+        }
+
+        /**
+         * Convert binary to string
+         * @param {string} binary - Binary string
+         * @returns {string} - Decoded string
+         */
+        function binaryToString(binary) {
+            const bytes = [];
+            for (let i = 0; i < binary.length; i += 8) {
+                const byte = binary.slice(i, i + 8);
+                if (byte.length === 8) {
+                    bytes.push(parseInt(byte, 2));
+                }
+            }
+            const decoder = new TextDecoder();
+            return decoder.decode(new Uint8Array(bytes));
+        }
+
+        /**
+         * Encode data into image using LSB
+         * @param {ImageData} imageData - Canvas image data
+         * @param {string} data - Data to hide
+         * @returns {ImageData} - Modified image data
+         */
+        function encodeDataInImage(imageData, data) {
+            const pixels = imageData.data;
+            const binary = stringToBinary(data + DELIMITER);
+            
+            // Store length in first 32 bits (4 bytes = length up to ~4 billion)
+            const lengthBinary = binary.length.toString(2).padStart(HEADER_LENGTH, '0');
+            const fullData = lengthBinary + binary;
+            
+            // Check capacity
+            const maxBits = Math.floor(pixels.length * 0.75); // Only RGB, not Alpha
+            if (fullData.length > maxBits) {
+                throw new Error(`데이터가 너무 큽니다. 최대 ${Math.floor(maxBits / 8)} 바이트까지 저장 가능합니다.`);
+            }
+            
+            let bitIndex = 0;
+            
+            for (let i = 0; i < pixels.length && bitIndex < fullData.length; i++) {
+                // Skip alpha channel (every 4th byte)
+                if ((i + 1) % 4 === 0) continue;
+                
+                // Modify LSB
+                const bit = parseInt(fullData[bitIndex], 10);
+                pixels[i] = (pixels[i] & 0xFE) | bit;
+                bitIndex++;
+            }
+            
+            return imageData;
+        }
+
+        /**
+         * Decode data from image using LSB
+         * @param {ImageData} imageData - Canvas image data
+         * @returns {string} - Extracted data
+         */
+        function decodeDataFromImage(imageData) {
+            const pixels = imageData.data;
+            let binary = '';
+            let bitIndex = 0;
+            
+            // First, read the length header
+            let lengthBinary = '';
+            for (let i = 0; i < pixels.length && bitIndex < HEADER_LENGTH; i++) {
+                if ((i + 1) % 4 === 0) continue;
+                lengthBinary += (pixels[i] & 1).toString();
+                bitIndex++;
+            }
+            
+            const dataLength = parseInt(lengthBinary, 2);
+            
+            // Sanity check
+            if (dataLength <= 0 || dataLength > pixels.length) {
+                throw new Error('이 이미지에는 숨겨진 데이터가 없거나 손상되었습니다.');
+            }
+            
+            // Read the actual data
+            let dataBinary = '';
+            let pixelIndex = 0;
+            bitIndex = 0;
+            
+            // Skip header bits
+            let skipBits = HEADER_LENGTH;
+            for (let i = 0; i < pixels.length; i++) {
+                if ((i + 1) % 4 === 0) continue;
+                
+                if (skipBits > 0) {
+                    skipBits--;
+                    continue;
+                }
+                
+                if (bitIndex >= dataLength) break;
+                
+                dataBinary += (pixels[i] & 1).toString();
+                bitIndex++;
+            }
+            
+            // Convert to string and find delimiter
+            const decoded = binaryToString(dataBinary);
+            const delimiterIndex = decoded.indexOf(DELIMITER);
+            
+            if (delimiterIndex === -1) {
+                throw new Error('데이터 종료 마커를 찾을 수 없습니다. 이미지가 손상되었거나 숨겨진 데이터가 없습니다.');
+            }
+            
+            return decoded.substring(0, delimiterIndex);
+        }
+
+        // ============================================
+        // AES Encryption/Decryption
+        // ============================================
+
+        /**
+         * Encrypt text using AES-256
+         * @param {string} text - Plain text
+         * @param {string} key - Encryption key
+         * @returns {string} - Encrypted cipher text
+         */
+        function encryptAES(text, key) {
+            return CryptoJS.AES.encrypt(text, key).toString();
+        }
+
+        /**
+         * Decrypt AES-256 cipher text
+         * @param {string} cipherText - Encrypted text
+         * @param {string} key - Decryption key
+         * @returns {string} - Decrypted plain text
+         */
+        function decryptAES(cipherText, key) {
+            const bytes = CryptoJS.AES.decrypt(cipherText, key);
+            const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+            if (!decrypted) {
+                throw new Error('복호화 실패: 잘못된 키이거나 데이터가 손상되었습니다.');
+            }
+            return decrypted;
+        }
+
+        // ============================================
+        // Main Encode/Decode Functions
+        // ============================================
+
+        encodeBtn.addEventListener('click', async () => {
+            try {
+                showLoading('암호화 중...');
+                await delay(100);
+                
+                const text = secretText.value;
+                const password = encodePassword.value;
+                
+                // Encrypt the message
+                updateLoading('AES-256 암호화 중...', 20);
+                await delay(100);
+                const encrypted = encryptAES(text, password);
+                
+                // Create a copy of the image data
+                updateLoading('이미지 데이터 준비 중...', 40);
+                await delay(100);
+                ctx.drawImage(currentImage, 0, 0);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Encode the data
+                updateLoading('LSB 스테가노그래피 처리 중...', 60);
+                await delay(100);
+                const encodedData = encodeDataInImage(imageData, encrypted);
+                
+                // Put the modified data back
+                updateLoading('이미지 생성 중...', 80);
+                await delay(100);
+                ctx.putImageData(encodedData, 0, 0);
+                
+                // Convert to PNG
+                encodedImageDataURL = canvas.toDataURL('image/png');
+                
+                // Show comparison
+                updateLoading('완료!', 100);
+                await delay(200);
+                
+                document.getElementById('originalCompare').src = imagePreview.src;
+                document.getElementById('encodedCompare').src = encodedImageDataURL;
+                encodeResult.classList.add('visible');
+                
+                hideLoading();
+                showToast('메시지가 성공적으로 숨겨졌습니다!', 'success');
+                
+            } catch (error) {
+                hideLoading();
+                showToast(error.message, 'error');
+            }
+        });
+
+        decodeBtn.addEventListener('click', async () => {
+            try {
+                showLoading('데이터 추출 중...');
+                await delay(100);
+                
+                const password = decodePassword.value;
+                
+                // Get image data
+                updateLoading('이미지 분석 중...', 30);
+                await delay(100);
+                ctx.drawImage(currentImage, 0, 0);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Extract the data
+                updateLoading('LSB 데이터 추출 중...', 60);
+                await delay(100);
+                const encrypted = decodeDataFromImage(imageData);
+                
+                // Decrypt
+                updateLoading('AES-256 복호화 중...', 90);
+                await delay(100);
+                const decrypted = decryptAES(encrypted, password);
+                
+                // Show result
+                updateLoading('완료!', 100);
+                await delay(200);
+                
+                document.getElementById('decodedText').textContent = decrypted;
+                decodeResult.classList.add('visible');
+                
+                hideLoading();
+                showToast('메시지가 성공적으로 추출되었습니다!', 'success');
+                
+            } catch (error) {
+                hideLoading();
+                showToast(error.message, 'error');
+            }
+        });
+
+        // Copy decoded text
+        document.getElementById('copyDecoded').addEventListener('click', () => {
+            const text = document.getElementById('decodedText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('클립보드에 복사되었습니다!', 'success');
+            });
+        });
+
+        // Download encoded image
+        downloadBtn.addEventListener('click', () => {
+            if (!encodedImageDataURL) return;
+            
+            const link = document.createElement('a');
+            link.download = 'stego_secret.png';
+            link.href = encodedImageDataURL;
+            link.click();
+            
+            showToast('이미지가 다운로드되었습니다!', 'success');
+        });
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showLoading(text) {
+            loadingText.textContent = text;
+            loadingProgress.style.width = '0%';
+            loadingOverlay.classList.add('visible');
+        }
+
+        function updateLoading(text, progress) {
+            loadingText.textContent = text;
+            loadingProgress.style.width = `${progress}%`;
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('visible');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️'
+            };
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initial state
+        updateButtonState();
+    </script>
+</body>
+</html>
+
