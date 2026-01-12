@@ -3,47 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 Steganography Vault</title>
+    <title>스테가노그래피 콘솔</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a25;
-            --bg-card: #16161f;
-            --text-primary: #e8e8ed;
-            --text-secondary: #9494a8;
-            --text-muted: #5c5c6e;
-            --accent-primary: #00d4aa;
-            --accent-secondary: #00b894;
-            --accent-glow: rgba(0, 212, 170, 0.3);
-            --warning: #ffc107;
-            --error: #ff6b6b;
-            --success: #00d4aa;
-            --border: #2a2a3a;
-            --border-hover: #3a3a4a;
-            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
-            --gradient-2: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --shadow-glow: 0 0 40px rgba(0, 212, 170, 0.15);
+            --bg-primary: #0b0f0c;
+            --bg-secondary: #101511;
+            --bg-tertiary: #151c17;
+            --bg-card: #0f1411;
+            --text-primary: #e6f2e9;
+            --text-secondary: #9ab3a2;
+            --text-muted: #6d8074;
+            --accent-primary: #33d17a;
+            --accent-secondary: #1aa75f;
+            --accent-glow: rgba(51, 209, 122, 0.2);
+            --warning: #e0b84c;
+            --error: #e06c75;
+            --success: #33d17a;
+            --border: #1f2a22;
+            --border-hover: #2c3a2f;
+            --gradient-1: linear-gradient(0deg, #33d17a 0%, #33d17a 100%);
+            --gradient-2: linear-gradient(0deg, #1aa75f 0%, #1aa75f 100%);
+            --gradient-3: linear-gradient(0deg, #1aa75f 0%, #1aa75f 100%);
+            --shadow-glow: none;
         }
 
         [data-theme="light"] {
-            --bg-primary: #f5f7fa;
+            --bg-primary: #f2f5f2;
             --bg-secondary: #ffffff;
-            --bg-tertiary: #eef1f5;
+            --bg-tertiary: #e9efe9;
             --bg-card: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --text-muted: #8888a0;
-            --accent-primary: #00a884;
-            --accent-secondary: #008f6b;
-            --accent-glow: rgba(0, 168, 132, 0.2);
-            --border: #e0e4ea;
-            --border-hover: #c8cdd4;
-            --shadow-glow: 0 4px 20px rgba(0, 168, 132, 0.1);
+            --text-primary: #101410;
+            --text-secondary: #4a5b4f;
+            --text-muted: #6f7f74;
+            --accent-primary: #1a7f4b;
+            --accent-secondary: #15663c;
+            --accent-glow: rgba(26, 127, 75, 0.15);
+            --border: #d6ded6;
+            --border-hover: #c2cdc2;
+            --shadow-glow: none;
         }
 
         * {
@@ -53,12 +53,12 @@
         }
 
         body {
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         /* Background Pattern */
@@ -69,9 +69,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 20%, var(--accent-glow) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            background:
+                repeating-linear-gradient(0deg, rgba(90, 140, 110, 0.08) 0, rgba(90, 140, 110, 0.08) 1px, transparent 1px, transparent 24px),
+                repeating-linear-gradient(90deg, rgba(90, 140, 110, 0.08) 0, rgba(90, 140, 110, 0.08) 1px, transparent 1px, transparent 24px);
             pointer-events: none;
             z-index: -1;
         }
@@ -97,29 +97,28 @@
         }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-1);
-            border-radius: 16px;
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border-radius: 6px;
+            border: 1px solid var(--accent-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: var(--shadow-glow);
+            font-size: 1.2rem;
+            color: var(--accent-primary);
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            letter-spacing: 0.5px;
         }
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -129,22 +128,20 @@
             position: fixed;
             top: 1.5rem;
             right: 1.5rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--bg-card);
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            transition: all 0.2s ease;
             z-index: 100;
         }
 
         .theme-toggle:hover {
-            transform: scale(1.1);
             border-color: var(--accent-primary);
         }
 
@@ -157,15 +154,15 @@
         }
 
         .mode-tab {
-            padding: 1rem 2.5rem;
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 0.9rem 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-secondary);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -177,9 +174,9 @@
         }
 
         .mode-tab.active {
-            background: var(--gradient-1);
-            border-color: transparent;
-            color: #fff;
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #0b0f0c;
         }
 
         .mode-tab .icon {
@@ -203,9 +200,9 @@
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 8px;
             padding: 2rem;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s ease;
         }
 
         .card:hover {
@@ -222,10 +219,10 @@
         }
 
         .card-title .icon {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             background: var(--bg-tertiary);
-            border-radius: 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -233,26 +230,25 @@
 
         /* Upload Zone */
         .upload-zone {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
             padding: 3rem 2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--bg-tertiary);
+            transition: all 0.2s ease;
+            background: var(--bg-secondary);
             position: relative;
             overflow: hidden;
         }
 
         .upload-zone:hover {
             border-color: var(--accent-primary);
-            background: rgba(0, 212, 170, 0.05);
+            background: rgba(51, 209, 122, 0.05);
         }
 
         .upload-zone.dragover {
             border-color: var(--accent-primary);
-            background: rgba(0, 212, 170, 0.1);
-            transform: scale(1.02);
+            background: rgba(51, 209, 122, 0.08);
         }
 
         .upload-zone.has-image {
@@ -287,7 +283,7 @@
         .image-preview {
             max-width: 100%;
             max-height: 300px;
-            border-radius: 12px;
+            border-radius: 6px;
             display: none;
         }
 
@@ -304,7 +300,7 @@
             margin-top: 1rem;
             padding: 1rem;
             background: var(--bg-tertiary);
-            border-radius: 10px;
+            border-radius: 6px;
             display: none;
         }
 
@@ -338,9 +334,9 @@
 
         .capacity-fill {
             height: 100%;
-            background: var(--gradient-1);
+            background: var(--accent-primary);
             border-radius: 4px;
-            transition: width 0.3s ease;
+            transition: width 0.2s ease;
             width: 0%;
         }
 
@@ -363,7 +359,7 @@
             padding: 0.6rem 0.75rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 6px;
             font-size: 0.9rem;
         }
 
@@ -386,7 +382,7 @@
             padding: 1rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
         }
 
         .settings-section h3 {
@@ -416,9 +412,9 @@
         }
 
         .chip.active {
-            background: var(--gradient-1);
-            color: #fff;
-            border-color: transparent;
+            background: var(--accent-primary);
+            color: #0b0f0c;
+            border-color: var(--accent-primary);
         }
 
         .toggle-row {
@@ -443,7 +439,7 @@
 
         .small-btn {
             padding: 0.4rem 0.7rem;
-            border-radius: 10px;
+            border-radius: 6px;
             border: 1px solid var(--border);
             background: var(--bg-card);
             color: var(--text-primary);
@@ -465,7 +461,7 @@
         .status-box {
             margin-top: 0.75rem;
             padding: 0.75rem;
-            border-radius: 10px;
+            border-radius: 6px;
             border: 1px solid var(--border);
             background: var(--bg-card);
             font-size: 0.9rem;
@@ -486,7 +482,7 @@
             padding: 1.5rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 8px;
         }
 
         .history-list {
@@ -498,7 +494,7 @@
 
         .history-item {
             padding: 0.75rem;
-            border-radius: 12px;
+            border-radius: 6px;
             background: var(--bg-tertiary);
             font-size: 0.85rem;
             display: flex;
@@ -534,7 +530,7 @@
             padding: 1rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
             color: var(--text-primary);
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.95rem;
@@ -593,7 +589,7 @@
             padding: 1rem 3rem 1rem 1rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
             color: var(--text-primary);
             font-family: 'JetBrains Mono', monospace;
             font-size: 1rem;
@@ -620,11 +616,11 @@
             padding: 1rem 1.5rem;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
             color: var(--text-primary);
             cursor: pointer;
             font-size: 1.2rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-generate:hover {
@@ -671,7 +667,7 @@
         .btn {
             flex: 1;
             padding: 1rem 2rem;
-            border-radius: 12px;
+            border-radius: 6px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -679,25 +675,25 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            transition: all 0.3s ease;
-            border: none;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
         }
 
         .btn-primary {
-            background: var(--gradient-1);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            background: var(--accent-primary);
+            color: #0b0f0c;
+            border-color: var(--accent-primary);
+            box-shadow: none;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px var(--accent-glow);
+            filter: brightness(1.05);
         }
 
         .btn-primary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
+            filter: none;
         }
 
         .btn-secondary {
@@ -729,7 +725,7 @@
         .result-title {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--success);
+            color: var(--accent-primary);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -762,7 +758,7 @@
         .decoded-text {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
             padding: 1.5rem;
             font-family: 'JetBrains Mono', monospace;
             white-space: pre-wrap;
@@ -775,9 +771,9 @@
         .info-panel {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: rgba(0, 212, 170, 0.05);
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            border-radius: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .info-panel-title {
@@ -823,8 +819,8 @@
             padding: 1rem 1.5rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            box-shadow: none;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -904,8 +900,8 @@
 
         .loading-progress-fill {
             height: 100%;
-            background: var(--gradient-1);
-            transition: width 0.3s ease;
+            background: var(--accent-primary);
+            transition: width 0.2s ease;
         }
 
         /* Canvas (hidden) */
@@ -919,7 +915,7 @@
             padding: 2rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 8px;
         }
 
         .how-it-works h2 {
@@ -940,17 +936,18 @@
         }
 
         .step-number {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-1);
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border-radius: 6px;
+            border: 1px solid var(--accent-primary);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1rem;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--accent-primary);
         }
 
         .step-title {
@@ -1019,12 +1016,12 @@
         }
 
         .binary-bit.zero {
-            background: rgba(255, 107, 107, 0.2);
+            background: rgba(224, 108, 117, 0.2);
             color: var(--error);
         }
 
         .binary-bit.one {
-            background: rgba(0, 212, 170, 0.2);
+            background: rgba(51, 209, 122, 0.2);
             color: var(--success);
         }
 
@@ -1079,7 +1076,7 @@
 <body>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text" id="loadingText">Processing...</div>
+        <div class="loading-text" id="loadingText">처리 중...</div>
         <div class="loading-progress">
             <div class="loading-progress-fill" id="loadingProgress"></div>
         </div>
@@ -1087,30 +1084,29 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+    <button class="theme-toggle" id="themeToggle" title="테마 전환">🌙</button>
 
     <canvas id="canvas"></canvas>
 
     <div class="container">
         <header>
             <div class="logo">
-                <div class="logo-icon">🔐</div>
-                <h1>Steganography Vault</h1>
+                <div class="logo-icon">>_</div>
+                <h1>스테가노그래피 콘솔</h1>
             </div>
             <p class="subtitle">
-                이미지 속에 비밀 메시지를 숨기고, AES-256 암호화로 안전하게 보호하세요.
-                모든 처리는 브라우저에서 이루어져 서버로 전송되지 않습니다.
+                로컬에서만 동작하는 개인 금고입니다. 이미지를 통해 암호화된 메시지를 숨기고 꺼내세요.
             </p>
         </header>
 
         <div class="mode-tabs" role="tablist" aria-label="모드 선택">
             <button class="mode-tab active" data-mode="encode" role="tab" aria-selected="true" tabindex="0">
                 <span class="icon">📥</span>
-                <span>메시지 숨기기 (Encode)</span>
+                <span>메시지 숨기기</span>
             </button>
             <button class="mode-tab" data-mode="decode" role="tab" aria-selected="false" tabindex="-1">
                 <span class="icon">📤</span>
-                <span>메시지 추출 (Decode)</span>
+                <span>메시지 추출</span>
             </button>
         </div>
 
@@ -1311,11 +1307,11 @@
                     <div class="comparison-view">
                         <div class="comparison-item">
                             <div class="comparison-label">원본 이미지</div>
-                            <img id="originalCompare" alt="Original">
+                            <img id="originalCompare" alt="원본 이미지">
                         </div>
                         <div class="comparison-item">
                             <div class="comparison-label">스테가노 이미지</div>
-                            <img id="encodedCompare" alt="Encoded">
+                            <img id="encodedCompare" alt="스테가노 이미지">
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -1391,7 +1387,7 @@
         </div>
 
         <footer>
-            <a href="https://github.com/answndud/Steganography" target="_blank">View on GitHub</a>
+            <a href="https://github.com/answndud/Steganography" target="_blank">GitHub에서 보기</a>
         </footer>
     </div>
 
@@ -1664,7 +1660,23 @@
             byteCount.textContent = '텍스트 크기: 0 B · 예상 암호문: -';
             encodeResult.classList.remove('visible');
             decodeResult.classList.remove('visible');
+            clearSensitiveData();
             updateButtonState();
+        }
+
+        function clearSensitiveData() {
+            secretText.value = '';
+            encodePassword.value = '';
+            decodePassword.value = '';
+            randomSeed.value = '';
+            document.getElementById('decodedText').textContent = '';
+            checksumText.textContent = '체크섬: -';
+            encodePassword.type = 'password';
+            decodePassword.type = 'password';
+            document.getElementById('toggleEncodePassword').textContent = '👁️';
+            document.getElementById('toggleDecodePassword').textContent = '👁️';
+            updatePasswordStrength('');
+            updateByteCount();
         }
 
         function updateImageInfo(file, img) {
