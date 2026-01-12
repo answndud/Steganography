@@ -480,6 +480,16 @@ PNG (무손실 압축):
 총 비트 = 32 + (암호문 길이 × 8) + (구분자 길이 × 8)
 ```
 
+### 6.1.1 메타데이터 헤더 (v1)
+
+현재 구현은 페이로드 앞에 간단한 메타데이터 헤더를 추가합니다. 디코딩 시 숨김 설정(LSB, 채널, 랜덤 여부)을 확인하는 용도로 사용됩니다.
+
+```
+STEGO1|{"v":1,"bits":1,"channels":"RGB","randomize":false}|<암호문>
+```
+
+> 랜덤 삽입 시드는 보안상 저장하지 않으며, 디코딩 시 수동 입력이 필요합니다.
+
 ### 6.2 헤더 설계
 
 ```javascript
@@ -542,7 +552,7 @@ async function encodeMessage(image, message, password) {
 ### 6.5 픽셀 순회 및 데이터 삽입
 
 ```javascript
-function embedDataInPixels(imageData, binaryData) {
+function embedDataInPixels(imageData, binaryData, settings) {
     const pixels = imageData.data;
     let bitIndex = 0;
     
@@ -553,14 +563,8 @@ function embedDataInPixels(imageData, binaryData) {
     // │ ...                 │
     // └─────────────────────┘
     
-    for (let i = 0; i < pixels.length && bitIndex < binaryData.length; i++) {
-        // Alpha 채널 건너뛰기
-        if ((i + 1) % 4 === 0) continue;
-        
-        const bit = parseInt(binaryData[bitIndex], 10);
-        pixels[i] = (pixels[i] & 0xFE) | bit;
-        bitIndex++;
-    }
+    // settings.bitsPerChannel, settings.channels, settings.randomize에 따라
+    // 채널 선택/비트 수/삽입 순서를 변경할 수 있음
 }
 ```
 
@@ -956,4 +960,3 @@ function calculateCapacity(width, height) {
 
 *이 문서는 Steganography Vault 프로젝트의 기술적 구현 세부사항을 설명합니다.*
 *보안 관련 결정은 전문가와 상담하시기 바랍니다.*
-

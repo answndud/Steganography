@@ -344,6 +344,178 @@
             width: 0%;
         }
 
+        .file-list {
+            margin-top: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .file-list.visible {
+            display: flex;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .file-item button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .settings-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .settings-section h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .settings-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .chip {
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .chip.active {
+            background: var(--gradient-1);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-row input[type="checkbox"] {
+            transform: scale(1.1);
+        }
+
+        .inline-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .small-btn {
+            padding: 0.4rem 0.7rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .small-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.35rem;
+        }
+
+        .status-box {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-size: 0.9rem;
+        }
+
+        .status-box.success {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .status-box.error {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .history-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .history-item {
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
         /* Text Input */
         .text-input-wrapper {
             margin-top: 1.5rem;
@@ -931,12 +1103,12 @@
             </p>
         </header>
 
-        <div class="mode-tabs">
-            <button class="mode-tab active" data-mode="encode">
+        <div class="mode-tabs" role="tablist" aria-label="모드 선택">
+            <button class="mode-tab active" data-mode="encode" role="tab" aria-selected="true" tabindex="0">
                 <span class="icon">📥</span>
                 <span>메시지 숨기기 (Encode)</span>
             </button>
-            <button class="mode-tab" data-mode="decode">
+            <button class="mode-tab" data-mode="decode" role="tab" aria-selected="false" tabindex="-1">
                 <span class="icon">📤</span>
                 <span>메시지 추출 (Decode)</span>
             </button>
@@ -950,8 +1122,8 @@
                     이미지 선택
                 </div>
 
-                <div class="upload-zone" id="uploadZone">
-                    <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp">
+                <div class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="이미지 업로드">
+                    <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" multiple>
                     <div class="upload-content">
                         <div class="upload-icon">📁</div>
                         <div class="upload-text">
@@ -972,6 +1144,10 @@
                         <span class="image-info-value" id="fileSize">-</span>
                     </div>
                     <div class="image-info-row">
+                        <span class="image-info-label">메타데이터</span>
+                        <span class="image-info-value" id="metadataInfo">브라우저에서 EXIF 확인 불가</span>
+                    </div>
+                    <div class="image-info-row">
                         <span class="image-info-label">해상도</span>
                         <span class="image-info-value" id="resolution">-</span>
                     </div>
@@ -984,9 +1160,51 @@
                     </div>
                 </div>
 
+                <div class="file-list" id="fileList" aria-live="polite"></div>
+
                 <button class="btn btn-secondary" id="clearImage" style="margin-top: 1rem; display: none; width: 100%;">
                     🗑️ 이미지 제거
                 </button>
+
+                <div class="settings-section" id="stegoSettings">
+                    <h3>스테가노 설정</h3>
+                    <div class="settings-grid">
+                        <div>
+                            <div class="helper-text">비트 깊이</div>
+                            <div class="option-group" id="bitDepthGroup">
+                                <button class="chip active" data-bits="1">1-LSB</button>
+                                <button class="chip" data-bits="2">2-LSB</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="helper-text">채널 선택</div>
+                            <div class="option-group" id="channelGroup">
+                                <button class="chip active" data-channel="r">R</button>
+                                <button class="chip active" data-channel="g">G</button>
+                                <button class="chip active" data-channel="b">B</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="helper-text">삽입 순서</div>
+                            <div class="toggle-row">
+                                <span>픽셀 랜덤화</span>
+                                <input type="checkbox" id="randomizeToggle">
+                            </div>
+                            <input class="seed-input" id="randomSeed" placeholder="시드 입력 (랜덤화 사용 시)" style="margin-top: 0.5rem; width: 100%; padding: 0.6rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <div class="toggle-row">
+                                <span>Web Worker 사용</span>
+                                <input type="checkbox" id="workerToggle" checked>
+                            </div>
+                            <div class="toggle-row" style="margin-top: 0.5rem;">
+                                <span>출력 메타데이터 제거</span>
+                                <input type="checkbox" id="stripMetadataToggle" checked>
+                            </div>
+                            <div class="helper-text">Canvas 저장은 기본적으로 메타데이터가 제거됩니다.</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Panel: Text & Password -->
@@ -1004,6 +1222,7 @@
                             placeholder="여기에 숨기고 싶은 메시지를 입력하세요...&#10;&#10;이 메시지는 AES-256으로 암호화된 후 이미지 픽셀에 숨겨집니다."
                         ></textarea>
                         <div class="char-count" id="charCount">0 / <span id="maxChars">0</span> 문자</div>
+                        <div class="helper-text" id="byteCount">텍스트 크기: 0 B · 예상 암호문: -</div>
                     </div>
 
                     <div class="password-wrapper">
@@ -1023,6 +1242,12 @@
                                 <div class="strength-bar" id="str4"></div>
                             </div>
                             <span class="strength-text" id="strengthText">-</span>
+                        </div>
+                        <div class="inline-actions">
+                            <button class="small-btn" id="copyKeyBtn">키 복사</button>
+                            <button class="small-btn" id="exportKeyBtn">키 내보내기</button>
+                            <button class="small-btn" id="importKeyBtn">키 불러오기</button>
+                            <input type="file" id="importKeyInput" accept=".txt" style="display: none;">
                         </div>
                     </div>
 
@@ -1047,13 +1272,21 @@
                                 <button class="password-toggle" id="toggleDecodePassword">👁️</button>
                             </div>
                         </div>
+                        <div class="inline-actions">
+                            <button class="small-btn" id="importDecodeKeyBtn">키 불러오기</button>
+                            <input type="file" id="importDecodeKeyInput" accept=".txt" style="display: none;">
+                        </div>
                     </div>
 
                     <div class="action-buttons">
                         <button class="btn btn-primary" id="decodeBtn" disabled>
                             🔓 메시지 추출하기
                         </button>
+                        <button class="btn btn-secondary" id="verifyBtn" disabled>
+                            🔍 숨김 데이터 검사
+                        </button>
                     </div>
+                    <div class="status-box" id="verifyStatus" style="display: none;"></div>
 
                     <div class="result-section" id="decodeResult">
                         <div class="result-header">
@@ -1090,7 +1323,29 @@
                             💾 이미지 다운로드
                         </button>
                     </div>
+                    <div class="settings-section">
+                        <h3>공유 체크리스트</h3>
+                        <div class="helper-text">이미지와 키를 따로 공유해 실수를 줄이세요.</div>
+                        <div class="inline-actions">
+                            <button class="small-btn" id="copyShareKeyBtn">키만 복사</button>
+                            <button class="small-btn" id="copySharePackBtn">공유 텍스트 복사</button>
+                            <button class="small-btn" id="checksumBtn">SHA-256 생성</button>
+                        </div>
+                        <div class="helper-text" id="checksumText">체크섬: -</div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="history-panel" id="historyPanel">
+            <div class="card-title">
+                <span class="icon">🗂️</span>
+                최근 작업 기록
+            </div>
+            <div class="helper-text">최근 10개 작업만 브라우저에 저장됩니다.</div>
+            <div class="history-list" id="historyList"></div>
+            <div class="inline-actions">
+                <button class="small-btn" id="clearHistoryBtn">기록 지우기</button>
             </div>
         </div>
 
@@ -1149,12 +1404,16 @@
         const DELIMITER = '###STEGO_END###';
         const HEADER_LENGTH = 32; // bits for storing data length
         const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+        const STEGO_MAGIC = 'STEGO1';
+        const HISTORY_KEY = 'stego-history';
 
         // State
         let currentImage = null;
         let originalImageData = null;
         let encodedImageDataURL = null;
         let currentMode = 'encode';
+        let selectedFiles = [];
+        let stegoWorker = null;
 
         // DOM Elements
         const canvas = document.getElementById('canvas');
@@ -1164,13 +1423,18 @@
         const imagePreview = document.getElementById('imagePreview');
         const imageInfo = document.getElementById('imageInfo');
         const clearImageBtn = document.getElementById('clearImage');
+        const fileList = document.getElementById('fileList');
+        const metadataInfo = document.getElementById('metadataInfo');
         const secretText = document.getElementById('secretText');
         const charCount = document.getElementById('charCount');
         const maxCharsSpan = document.getElementById('maxChars');
+        const byteCount = document.getElementById('byteCount');
         const encodePassword = document.getElementById('encodePassword');
         const decodePassword = document.getElementById('decodePassword');
         const encodeBtn = document.getElementById('encodeBtn');
         const decodeBtn = document.getElementById('decodeBtn');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const verifyStatus = document.getElementById('verifyStatus');
         const downloadBtn = document.getElementById('downloadBtn');
         const encodeResult = document.getElementById('encodeResult');
         const decodeResult = document.getElementById('decodeResult');
@@ -1178,6 +1442,24 @@
         const loadingText = document.getElementById('loadingText');
         const loadingProgress = document.getElementById('loadingProgress');
         const themeToggle = document.getElementById('themeToggle');
+        const bitDepthGroup = document.getElementById('bitDepthGroup');
+        const channelGroup = document.getElementById('channelGroup');
+        const randomizeToggle = document.getElementById('randomizeToggle');
+        const randomSeed = document.getElementById('randomSeed');
+        const workerToggle = document.getElementById('workerToggle');
+        const stripMetadataToggle = document.getElementById('stripMetadataToggle');
+        const copyKeyBtn = document.getElementById('copyKeyBtn');
+        const exportKeyBtn = document.getElementById('exportKeyBtn');
+        const importKeyBtn = document.getElementById('importKeyBtn');
+        const importKeyInput = document.getElementById('importKeyInput');
+        const importDecodeKeyBtn = document.getElementById('importDecodeKeyBtn');
+        const importDecodeKeyInput = document.getElementById('importDecodeKeyInput');
+        const copyShareKeyBtn = document.getElementById('copyShareKeyBtn');
+        const copySharePackBtn = document.getElementById('copySharePackBtn');
+        const checksumBtn = document.getElementById('checksumBtn');
+        const checksumText = document.getElementById('checksumText');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
         // ============================================
         // Theme Management
@@ -1211,7 +1493,13 @@
                 document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentMode = tab.dataset.mode;
-                
+
+                document.querySelectorAll('.mode-tab').forEach(t => {
+                    const isActive = t === tab;
+                    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                    t.tabIndex = isActive ? 0 : -1;
+                });
+
                 document.getElementById('encodePanel').style.display = currentMode === 'encode' ? 'block' : 'none';
                 document.getElementById('decodePanel').style.display = currentMode === 'decode' ? 'block' : 'none';
                 encodeResult.classList.remove('visible');
@@ -1225,6 +1513,12 @@
         // Image Upload & Handling
         // ============================================
         uploadZone.addEventListener('click', () => imageInput.click());
+        uploadZone.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                imageInput.click();
+            }
+        });
         
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -1238,16 +1532,16 @@
         uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadZone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                handleImageUpload(file);
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+            if (files.length > 0) {
+                addFiles(files);
             }
         });
 
         imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                handleImageUpload(file);
+            const files = Array.from(e.target.files || []).filter(file => file.type.startsWith('image/'));
+            if (files.length > 0) {
+                addFiles(files);
             }
         });
 
@@ -1255,7 +1549,70 @@
             clearImage();
         });
 
-        function handleImageUpload(file) {
+        function addFiles(files) {
+            const unique = files.filter(file => {
+                return !selectedFiles.some(existing =>
+                    existing.name === file.name &&
+                    existing.size === file.size &&
+                    existing.lastModified === file.lastModified
+                );
+            });
+
+            if (unique.length === 0) {
+                showToast('이미 추가된 파일입니다.', 'warning');
+                return;
+            }
+
+            selectedFiles = selectedFiles.concat(unique).slice(0, 10);
+            renderFileList();
+            loadFile(selectedFiles[0]);
+        }
+
+        function renderFileList() {
+            fileList.innerHTML = '';
+            if (selectedFiles.length === 0) {
+                fileList.classList.remove('visible');
+                return;
+            }
+
+            selectedFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <span>${file.name} · ${formatBytes(file.size)}</span>
+                    <div>
+                        <button data-action="load" data-index="${index}" title="불러오기">📥</button>
+                        <button data-action="remove" data-index="${index}" title="제거">✖</button>
+                    </div>
+                `;
+                fileList.appendChild(item);
+            });
+
+            fileList.classList.add('visible');
+        }
+
+        fileList.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
+            const index = parseInt(button.dataset.index, 10);
+            if (Number.isNaN(index)) return;
+            const action = button.dataset.action;
+            if (action === 'load') {
+                loadFile(selectedFiles[index]);
+            }
+            if (action === 'remove') {
+                selectedFiles.splice(index, 1);
+                renderFileList();
+                if (selectedFiles.length === 0) {
+                    clearImage();
+                } else {
+                    loadFile(selectedFiles[0]);
+                }
+            }
+        });
+
+        function loadFile(file) {
+            if (!file) return;
             if (file.size > MAX_FILE_SIZE) {
                 showToast('파일 크기가 10MB를 초과합니다.', 'error');
                 return;
@@ -1280,6 +1637,7 @@
                     updateImageInfo(file, img);
                     encodeResult.classList.remove('visible');
                     decodeResult.classList.remove('visible');
+                    verifyStatus.style.display = 'none';
                     
                     updateButtonState();
                 };
@@ -1297,6 +1655,13 @@
             clearImageBtn.style.display = 'none';
             imageInfo.classList.remove('visible');
             imageInput.value = '';
+            selectedFiles = [];
+            renderFileList();
+            verifyStatus.style.display = 'none';
+            document.getElementById('capacity').textContent = '-';
+            maxCharsSpan.textContent = '0';
+            document.getElementById('capacityFill').style.width = '0%';
+            byteCount.textContent = '텍스트 크기: 0 B · 예상 암호문: -';
             encodeResult.classList.remove('visible');
             decodeResult.classList.remove('visible');
             updateButtonState();
@@ -1306,17 +1671,98 @@
             document.getElementById('fileName').textContent = file.name;
             document.getElementById('fileSize').textContent = formatBytes(file.size);
             document.getElementById('resolution').textContent = `${img.width} × ${img.height}`;
+            metadataInfo.textContent = file.type === 'image/jpeg' ? 'JPEG는 EXIF 포함 가능' : 'PNG/WebP는 메타데이터 제한적';
             
-            // Calculate capacity: each pixel can store 3 bits (RGB), but we use only ~70% to be safe
-            const totalPixels = img.width * img.height;
-            const bitsAvailable = Math.floor(totalPixels * 3 * 0.7);
-            const bytesAvailable = Math.floor(bitsAvailable / 8);
-            const charsAvailable = Math.floor(bytesAvailable / 4); // UTF-8 can be up to 4 bytes per char
-            
-            document.getElementById('capacity').textContent = `~${formatBytes(bytesAvailable)} (약 ${charsAvailable.toLocaleString()}자)`;
-            maxCharsSpan.textContent = charsAvailable.toLocaleString();
-            
+            updateCapacityDisplay();
             imageInfo.classList.add('visible');
+        }
+
+        function getStegoSettings() {
+            const bitsPerChannel = parseInt(bitDepthGroup.querySelector('.chip.active')?.dataset.bits || '1', 10);
+            const activeChannels = Array.from(channelGroup.querySelectorAll('.chip.active')).map(chip => chip.dataset.channel);
+            return {
+                bitsPerChannel,
+                channels: activeChannels,
+                randomize: randomizeToggle.checked,
+                seed: randomSeed.value.trim(),
+                useWorker: workerToggle.checked,
+                stripMetadata: stripMetadataToggle.checked
+            };
+        }
+
+        function updateCapacityDisplay() {
+            if (!currentImage) return;
+            const settings = getStegoSettings();
+            const capacity = calculateCapacity(currentImage.width, currentImage.height, settings);
+            const charsAvailable = Math.floor(capacity.bytesAvailable / 4);
+            document.getElementById('capacity').textContent = `~${formatBytes(capacity.bytesAvailable)} (약 ${charsAvailable.toLocaleString()}자)`;
+            maxCharsSpan.textContent = charsAvailable.toLocaleString();
+            updateByteCount();
+        }
+
+        function calculateCapacity(width, height, settings) {
+            const totalPixels = width * height;
+            const channelCount = Math.max(settings.channels.length, 1);
+            const bitsAvailable = Math.floor(totalPixels * channelCount * settings.bitsPerChannel * 0.7);
+            return {
+                bitsAvailable,
+                bytesAvailable: Math.floor(bitsAvailable / 8)
+            };
+        }
+
+        function updateByteCount() {
+            const text = secretText.value;
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(text);
+            const estimated = estimateEncryptedSize(bytes.length);
+            byteCount.textContent = `텍스트 크기: ${formatBytes(bytes.length)} · 예상 암호문: ${estimated}`;
+        }
+
+        function estimateEncryptedSize(plainBytes) {
+            if (plainBytes === 0) return '-';
+            const blockSize = 16;
+            const padded = Math.ceil(plainBytes / blockSize) * blockSize;
+            const base64Len = Math.ceil(padded / 3) * 4;
+            return `${formatBytes(base64Len)} (Base64)`;
+        }
+
+        // ============================================
+        // Stego Settings Handling
+        // ============================================
+        bitDepthGroup.addEventListener('click', (e) => {
+            const button = e.target.closest('.chip');
+            if (!button) return;
+            bitDepthGroup.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
+            button.classList.add('active');
+            updateCapacityDisplay();
+        });
+
+        channelGroup.addEventListener('click', (e) => {
+            const button = e.target.closest('.chip');
+            if (!button) return;
+            button.classList.toggle('active');
+            if (channelGroup.querySelectorAll('.chip.active').length === 0) {
+                button.classList.add('active');
+                showToast('최소 1개 채널은 선택해야 합니다.', 'warning');
+            }
+            updateCapacityDisplay();
+        });
+
+        [randomizeToggle, randomSeed, workerToggle, stripMetadataToggle].forEach(el => {
+            el.addEventListener('input', () => {
+                updateCapacityDisplay();
+                updateRandomSeedState();
+            });
+            el.addEventListener('change', () => {
+                updateCapacityDisplay();
+                updateRandomSeedState();
+            });
+        });
+
+        function updateRandomSeedState() {
+            const enabled = randomizeToggle.checked;
+            randomSeed.disabled = !enabled;
+            randomSeed.style.opacity = enabled ? '1' : '0.6';
         }
 
         function formatBytes(bytes) {
@@ -1333,6 +1779,7 @@
             const max = parseInt(maxCharsSpan.textContent.replace(/,/g, '')) || 0;
             
             charCount.textContent = `${length.toLocaleString()} / ${maxCharsSpan.textContent} 문자`;
+            updateByteCount();
             
             if (max > 0) {
                 const percentage = (length / max) * 100;
@@ -1427,6 +1874,56 @@
             });
         });
 
+        copyKeyBtn.addEventListener('click', () => {
+            if (!encodePassword.value) {
+                showToast('복사할 키가 없습니다.', 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(encodePassword.value).then(() => {
+                showToast('키가 복사되었습니다.', 'success');
+            });
+        });
+
+        exportKeyBtn.addEventListener('click', () => {
+            if (!encodePassword.value) {
+                showToast('내보낼 키가 없습니다.', 'warning');
+                return;
+            }
+            const blob = new Blob([encodePassword.value], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'stego-key.txt';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('키 파일이 저장되었습니다.', 'success');
+        });
+
+        importKeyBtn.addEventListener('click', () => importKeyInput.click());
+        importDecodeKeyBtn.addEventListener('click', () => importDecodeKeyInput.click());
+
+        importKeyInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            file.text().then(text => {
+                encodePassword.value = text.trim();
+                updatePasswordStrength(encodePassword.value);
+                updateButtonState();
+                showToast('키를 불러왔습니다.', 'success');
+            });
+            e.target.value = '';
+        });
+
+        importDecodeKeyInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            file.text().then(text => {
+                decodePassword.value = text.trim();
+                updateButtonState();
+                showToast('키를 불러왔습니다.', 'success');
+            });
+            e.target.value = '';
+        });
+
         // ============================================
         // Button State Management
         // ============================================
@@ -1438,11 +1935,70 @@
             
             encodeBtn.disabled = !(hasImage && hasText && hasEncodePassword);
             decodeBtn.disabled = !(hasImage && hasDecodePassword);
+            verifyBtn.disabled = !hasImage;
         }
 
         // ============================================
         // LSB Steganography Implementation
         // ============================================
+
+        function getChannelOrder(settings) {
+            const map = { r: 0, g: 1, b: 2 };
+            return settings.channels.map(ch => map[ch]).filter(index => index !== undefined);
+        }
+
+        function buildIndexOrder(imageData, settings) {
+            const channels = getChannelOrder(settings);
+            const totalPixels = imageData.data.length / 4;
+            const indices = [];
+            indices.length = totalPixels * channels.length;
+            let idx = 0;
+            for (let i = 0; i < totalPixels; i++) {
+                const base = i * 4;
+                for (const channel of channels) {
+                    indices[idx++] = base + channel;
+                }
+            }
+
+            if (settings.randomize) {
+                if (!settings.seed) {
+                    throw new Error('랜덤화를 사용할 때는 시드를 입력해야 합니다.');
+                }
+                shuffleArray(indices, hashSeed(settings.seed));
+            }
+            return indices;
+        }
+
+        function hashSeed(seed) {
+            let hash = 2166136261;
+            for (let i = 0; i < seed.length; i++) {
+                hash ^= seed.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return hash >>> 0;
+        }
+
+        function mulberry32(a) {
+            return function() {
+                let t = a += 0x6D2B79F5;
+                t = Math.imul(t ^ (t >>> 15), t | 1);
+                t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function shuffleArray(array, seed) {
+            const rand = mulberry32(seed);
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(rand() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function applyBits(value, bits, bitCount) {
+            const mask = (1 << bitCount) - 1;
+            return (value & ~mask) | bits;
+        }
 
         /**
          * Convert string to binary representation
@@ -1482,32 +2038,26 @@
          * @param {string} data - Data to hide
          * @returns {ImageData} - Modified image data
          */
-        function encodeDataInImage(imageData, data) {
+        function encodeDataInImage(imageData, data, settings) {
             const pixels = imageData.data;
             const binary = stringToBinary(data + DELIMITER);
-            
-            // Store length in first 32 bits (4 bytes = length up to ~4 billion)
             const lengthBinary = binary.length.toString(2).padStart(HEADER_LENGTH, '0');
             const fullData = lengthBinary + binary;
-            
-            // Check capacity
-            const maxBits = Math.floor(pixels.length * 0.75); // Only RGB, not Alpha
+
+            const indices = buildIndexOrder(imageData, settings);
+            const maxBits = indices.length * settings.bitsPerChannel;
             if (fullData.length > maxBits) {
                 throw new Error(`데이터가 너무 큽니다. 최대 ${Math.floor(maxBits / 8)} 바이트까지 저장 가능합니다.`);
             }
-            
+
             let bitIndex = 0;
-            
-            for (let i = 0; i < pixels.length && bitIndex < fullData.length; i++) {
-                // Skip alpha channel (every 4th byte)
-                if ((i + 1) % 4 === 0) continue;
-                
-                // Modify LSB
-                const bit = parseInt(fullData[bitIndex], 10);
-                pixels[i] = (pixels[i] & 0xFE) | bit;
-                bitIndex++;
+            for (let i = 0; i < indices.length && bitIndex < fullData.length; i++) {
+                const slice = fullData.slice(bitIndex, bitIndex + settings.bitsPerChannel).padEnd(settings.bitsPerChannel, '0');
+                const bits = parseInt(slice, 2);
+                pixels[indices[i]] = applyBits(pixels[indices[i]], bits, settings.bitsPerChannel);
+                bitIndex += settings.bitsPerChannel;
             }
-            
+
             return imageData;
         }
 
@@ -1516,55 +2066,47 @@
          * @param {ImageData} imageData - Canvas image data
          * @returns {string} - Extracted data
          */
-        function decodeDataFromImage(imageData) {
+        function decodeDataFromImage(imageData, settings) {
             const pixels = imageData.data;
+            const indices = buildIndexOrder(imageData, settings);
+            const maxBits = indices.length * settings.bitsPerChannel;
+
             let binary = '';
-            let bitIndex = 0;
-            
-            // First, read the length header
-            let lengthBinary = '';
-            for (let i = 0; i < pixels.length && bitIndex < HEADER_LENGTH; i++) {
-                if ((i + 1) % 4 === 0) continue;
-                lengthBinary += (pixels[i] & 1).toString();
-                bitIndex++;
-            }
-            
-            const dataLength = parseInt(lengthBinary, 2);
-            
-            // Sanity check
-            if (dataLength <= 0 || dataLength > pixels.length) {
-                throw new Error('이 이미지에는 숨겨진 데이터가 없거나 손상되었습니다.');
-            }
-            
-            // Read the actual data
-            let dataBinary = '';
-            let pixelIndex = 0;
-            bitIndex = 0;
-            
-            // Skip header bits
-            let skipBits = HEADER_LENGTH;
-            for (let i = 0; i < pixels.length; i++) {
-                if ((i + 1) % 4 === 0) continue;
-                
-                if (skipBits > 0) {
-                    skipBits--;
-                    continue;
+            let dataLength = null;
+            const targetMinBits = HEADER_LENGTH;
+
+            for (let i = 0; i < indices.length; i++) {
+                const value = pixels[indices[i]];
+                const bits = (value & ((1 << settings.bitsPerChannel) - 1))
+                    .toString(2)
+                    .padStart(settings.bitsPerChannel, '0');
+                binary += bits;
+
+                if (dataLength === null && binary.length >= targetMinBits) {
+                    const header = binary.slice(0, HEADER_LENGTH);
+                    dataLength = parseInt(header, 2);
+                    if (dataLength <= 0 || dataLength > maxBits) {
+                        throw new Error('이 이미지에는 숨겨진 데이터가 없거나 손상되었습니다.');
+                    }
                 }
-                
-                if (bitIndex >= dataLength) break;
-                
-                dataBinary += (pixels[i] & 1).toString();
-                bitIndex++;
+
+                if (dataLength !== null && binary.length >= HEADER_LENGTH + dataLength) {
+                    break;
+                }
             }
-            
-            // Convert to string and find delimiter
-            const decoded = binaryToString(dataBinary);
+
+            if (dataLength === null) {
+                throw new Error('데이터 길이를 읽지 못했습니다.');
+            }
+
+            const payloadBinary = binary.slice(HEADER_LENGTH, HEADER_LENGTH + dataLength);
+            const decoded = binaryToString(payloadBinary);
             const delimiterIndex = decoded.indexOf(DELIMITER);
-            
+
             if (delimiterIndex === -1) {
                 throw new Error('데이터 종료 마커를 찾을 수 없습니다. 이미지가 손상되었거나 숨겨진 데이터가 없습니다.');
             }
-            
+
             return decoded.substring(0, delimiterIndex);
         }
 
@@ -1597,6 +2139,218 @@
             return decrypted;
         }
 
+        function buildPayload(encrypted, settings) {
+            const meta = {
+                v: 1,
+                bits: settings.bitsPerChannel,
+                channels: settings.channels.join('').toUpperCase(),
+                randomize: settings.randomize
+            };
+            return `${STEGO_MAGIC}|${JSON.stringify(meta)}|${encrypted}`;
+        }
+
+        function parsePayload(payload) {
+            if (!payload.startsWith(`${STEGO_MAGIC}|`)) {
+                return { encrypted: payload, meta: null };
+            }
+            const parts = payload.split('|');
+            if (parts.length < 3) {
+                return { encrypted: payload, meta: null };
+            }
+            try {
+                const meta = JSON.parse(parts[1]);
+                const encrypted = parts.slice(2).join('|');
+                return { encrypted, meta };
+            } catch (err) {
+                return { encrypted: payload, meta: null };
+            }
+        }
+
+        // ============================================
+        // Web Worker (optional)
+        // ============================================
+        function ensureWorker() {
+            if (stegoWorker) return stegoWorker;
+            const workerCode = `
+                const HEADER_LENGTH = ${HEADER_LENGTH};
+
+                function stringToBinary(str) {
+                    const encoder = new TextEncoder();
+                    const bytes = encoder.encode(str);
+                    let binary = '';
+                    for (const byte of bytes) {
+                        binary += byte.toString(2).padStart(8, '0');
+                    }
+                    return binary;
+                }
+
+                function binaryToString(binary) {
+                    const bytes = [];
+                    for (let i = 0; i < binary.length; i += 8) {
+                        const byte = binary.slice(i, i + 8);
+                        if (byte.length === 8) {
+                            bytes.push(parseInt(byte, 2));
+                        }
+                    }
+                    const decoder = new TextDecoder();
+                    return decoder.decode(new Uint8Array(bytes));
+                }
+
+                function hashSeed(seed) {
+                    let hash = 2166136261;
+                    for (let i = 0; i < seed.length; i++) {
+                        hash ^= seed.charCodeAt(i);
+                        hash = Math.imul(hash, 16777619);
+                    }
+                    return hash >>> 0;
+                }
+
+                function mulberry32(a) {
+                    return function() {
+                        let t = a += 0x6D2B79F5;
+                        t = Math.imul(t ^ (t >>> 15), t | 1);
+                        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                    };
+                }
+
+                function shuffleArray(array, seed) {
+                    const rand = mulberry32(seed);
+                    for (let i = array.length - 1; i > 0; i--) {
+                        const j = Math.floor(rand() * (i + 1));
+                        [array[i], array[j]] = [array[j], array[i]];
+                    }
+                }
+
+                function getChannelOrder(settings) {
+                    const map = { r: 0, g: 1, b: 2 };
+                    return settings.channels.map(ch => map[ch]).filter(index => index !== undefined);
+                }
+
+                function buildIndexOrder(imageData, settings) {
+                    const channels = getChannelOrder(settings);
+                    const totalPixels = imageData.data.length / 4;
+                    const indices = [];
+                    indices.length = totalPixels * channels.length;
+                    let idx = 0;
+                    for (let i = 0; i < totalPixels; i++) {
+                        const base = i * 4;
+                        for (const channel of channels) {
+                            indices[idx++] = base + channel;
+                        }
+                    }
+                    if (settings.randomize) {
+                        if (!settings.seed) {
+                            throw new Error('랜덤화를 사용할 때는 시드를 입력해야 합니다.');
+                        }
+                        shuffleArray(indices, hashSeed(settings.seed));
+                    }
+                    return indices;
+                }
+
+                function applyBits(value, bits, bitCount) {
+                    const mask = (1 << bitCount) - 1;
+                    return (value & ~mask) | bits;
+                }
+
+                function encodeDataInImage(imageData, data, settings) {
+                    const pixels = imageData.data;
+                    const binary = stringToBinary(data + '${DELIMITER}');
+                    const lengthBinary = binary.length.toString(2).padStart(HEADER_LENGTH, '0');
+                    const fullData = lengthBinary + binary;
+                    const indices = buildIndexOrder(imageData, settings);
+                    const maxBits = indices.length * settings.bitsPerChannel;
+                    if (fullData.length > maxBits) {
+                        throw new Error('데이터가 너무 큽니다.');
+                    }
+                    let bitIndex = 0;
+                    for (let i = 0; i < indices.length && bitIndex < fullData.length; i++) {
+                        const slice = fullData.slice(bitIndex, bitIndex + settings.bitsPerChannel)
+                            .padEnd(settings.bitsPerChannel, '0');
+                        const bits = parseInt(slice, 2);
+                        pixels[indices[i]] = applyBits(pixels[indices[i]], bits, settings.bitsPerChannel);
+                        bitIndex += settings.bitsPerChannel;
+                    }
+                    return imageData;
+                }
+
+                function decodeDataFromImage(imageData, settings) {
+                    const pixels = imageData.data;
+                    const indices = buildIndexOrder(imageData, settings);
+                    const maxBits = indices.length * settings.bitsPerChannel;
+                    let binary = '';
+                    let dataLength = null;
+                    for (let i = 0; i < indices.length; i++) {
+                        const value = pixels[indices[i]];
+                        const bits = (value & ((1 << settings.bitsPerChannel) - 1))
+                            .toString(2)
+                            .padStart(settings.bitsPerChannel, '0');
+                        binary += bits;
+                        if (dataLength === null && binary.length >= HEADER_LENGTH) {
+                            const header = binary.slice(0, HEADER_LENGTH);
+                            dataLength = parseInt(header, 2);
+                            if (dataLength <= 0 || dataLength > maxBits) {
+                                throw new Error('이 이미지에는 숨겨진 데이터가 없거나 손상되었습니다.');
+                            }
+                        }
+                        if (dataLength !== null && binary.length >= HEADER_LENGTH + dataLength) {
+                            break;
+                        }
+                    }
+                    if (dataLength === null) {
+                        throw new Error('데이터 길이를 읽지 못했습니다.');
+                    }
+                    const payloadBinary = binary.slice(HEADER_LENGTH, HEADER_LENGTH + dataLength);
+                    const decoded = binaryToString(payloadBinary);
+                    const delimiterIndex = decoded.indexOf('${DELIMITER}');
+                    if (delimiterIndex === -1) {
+                        throw new Error('데이터 종료 마커를 찾을 수 없습니다.');
+                    }
+                    return decoded.substring(0, delimiterIndex);
+                }
+
+                self.onmessage = (event) => {
+                    const { id, type, imageData, payload, settings } = event.data;
+                    try {
+                        if (type === 'encode') {
+                            const result = encodeDataInImage(imageData, payload, settings);
+                            self.postMessage({ id, result });
+                        }
+                        if (type === 'decode') {
+                            const result = decodeDataFromImage(imageData, settings);
+                            self.postMessage({ id, result });
+                        }
+                    } catch (error) {
+                        self.postMessage({ id, error: error.message });
+                    }
+                };
+            `;
+
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            stegoWorker = new Worker(url);
+            stegoWorker._url = url;
+            return stegoWorker;
+        }
+
+        function runWorkerTask({ type, imageData, payload, settings }) {
+            return new Promise((resolve, reject) => {
+                const worker = ensureWorker();
+                const id = `${Date.now()}-${Math.random()}`;
+                const handleMessage = (event) => {
+                    if (event.data.id !== id) return;
+                    worker.removeEventListener('message', handleMessage);
+                    if (event.data.error) {
+                        reject(new Error(event.data.error));
+                    } else {
+                        resolve(event.data.result);
+                    }
+                };
+                worker.addEventListener('message', handleMessage);
+                worker.postMessage({ id, type, imageData, payload, settings });
+            });
+        }
+
         // ============================================
         // Main Encode/Decode Functions
         // ============================================
@@ -1605,14 +2359,23 @@
             try {
                 showLoading('암호화 중...');
                 await delay(100);
-                
+
+                const settings = getStegoSettings();
                 const text = secretText.value;
                 const password = encodePassword.value;
+
+                if (settings.randomize && !settings.seed) {
+                    throw new Error('랜덤화 시드를 입력해주세요.');
+                }
+                if (!settings.stripMetadata) {
+                    showToast('브라우저 저장은 메타데이터를 유지할 수 없습니다.', 'warning');
+                }
                 
                 // Encrypt the message
                 updateLoading('AES-256 암호화 중...', 20);
                 await delay(100);
                 const encrypted = encryptAES(text, password);
+                const payload = buildPayload(encrypted, settings);
                 
                 // Create a copy of the image data
                 updateLoading('이미지 데이터 준비 중...', 40);
@@ -1623,7 +2386,9 @@
                 // Encode the data
                 updateLoading('LSB 스테가노그래피 처리 중...', 60);
                 await delay(100);
-                const encodedData = encodeDataInImage(imageData, encrypted);
+                const encodedData = settings.useWorker
+                    ? await runWorkerTask({ type: 'encode', imageData, payload, settings })
+                    : encodeDataInImage(imageData, payload, settings);
                 
                 // Put the modified data back
                 updateLoading('이미지 생성 중...', 80);
@@ -1640,9 +2405,18 @@
                 document.getElementById('originalCompare').src = imagePreview.src;
                 document.getElementById('encodedCompare').src = encodedImageDataURL;
                 encodeResult.classList.add('visible');
+
+                checksumText.textContent = '체크섬: -';
                 
                 hideLoading();
                 showToast('메시지가 성공적으로 숨겨졌습니다!', 'success');
+
+                addHistoryEntry({
+                    mode: 'encode',
+                    fileName: document.getElementById('fileName').textContent,
+                    resolution: document.getElementById('resolution').textContent,
+                    settings: settingsSummary(settings)
+                });
                 
             } catch (error) {
                 hideLoading();
@@ -1654,8 +2428,13 @@
             try {
                 showLoading('데이터 추출 중...');
                 await delay(100);
-                
+
+                const settings = getStegoSettings();
                 const password = decodePassword.value;
+
+                if (settings.randomize && !settings.seed) {
+                    throw new Error('랜덤화 시드를 입력해주세요.');
+                }
                 
                 // Get image data
                 updateLoading('이미지 분석 중...', 30);
@@ -1666,12 +2445,18 @@
                 // Extract the data
                 updateLoading('LSB 데이터 추출 중...', 60);
                 await delay(100);
-                const encrypted = decodeDataFromImage(imageData);
+                const payload = settings.useWorker
+                    ? await runWorkerTask({ type: 'decode', imageData, settings })
+                    : decodeDataFromImage(imageData, settings);
+                const parsed = parsePayload(payload);
+                if (parsed.meta) {
+                    applyMetadataToSettings(parsed.meta);
+                }
                 
                 // Decrypt
                 updateLoading('AES-256 복호화 중...', 90);
                 await delay(100);
-                const decrypted = decryptAES(encrypted, password);
+                const decrypted = decryptAES(parsed.encrypted, password);
                 
                 // Show result
                 updateLoading('완료!', 100);
@@ -1682,6 +2467,13 @@
                 
                 hideLoading();
                 showToast('메시지가 성공적으로 추출되었습니다!', 'success');
+
+                addHistoryEntry({
+                    mode: 'decode',
+                    fileName: document.getElementById('fileName').textContent,
+                    resolution: document.getElementById('resolution').textContent,
+                    settings: settingsSummary(settings)
+                });
                 
             } catch (error) {
                 hideLoading();
@@ -1707,6 +2499,75 @@
             link.click();
             
             showToast('이미지가 다운로드되었습니다!', 'success');
+        });
+
+        verifyBtn.addEventListener('click', async () => {
+            if (!currentImage) return;
+            try {
+                verifyStatus.style.display = 'block';
+                verifyStatus.className = 'status-box';
+                verifyStatus.textContent = '검사 중...';
+                const settings = getStegoSettings();
+                if (settings.randomize && !settings.seed) {
+                    throw new Error('랜덤화 시드를 입력해주세요.');
+                }
+                ctx.drawImage(currentImage, 0, 0);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const payload = settings.useWorker
+                    ? await runWorkerTask({ type: 'decode', imageData, settings })
+                    : decodeDataFromImage(imageData, settings);
+                const parsed = parsePayload(payload);
+                if (parsed.meta) {
+                    verifyStatus.classList.add('success');
+                    verifyStatus.textContent = `숨김 데이터 발견됨 · 설정: ${settingsSummaryFromMeta(parsed.meta)}`;
+                    applyMetadataToSettings(parsed.meta);
+                } else {
+                    verifyStatus.classList.add('error');
+                    verifyStatus.textContent = '숨김 데이터 구조를 확인할 수 없습니다.';
+                }
+            } catch (error) {
+                verifyStatus.classList.add('error');
+                verifyStatus.textContent = error.message;
+            }
+        });
+
+        copyShareKeyBtn.addEventListener('click', () => {
+            if (!encodePassword.value) {
+                showToast('복사할 키가 없습니다.', 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(encodePassword.value).then(() => {
+                showToast('키가 복사되었습니다.', 'success');
+            });
+        });
+
+        copySharePackBtn.addEventListener('click', () => {
+            if (!encodePassword.value) {
+                showToast('공유할 키가 없습니다.', 'warning');
+                return;
+            }
+            const settings = getStegoSettings();
+            const settingsText = settingsSummary(settings);
+            const fileName = document.getElementById('fileName').textContent || 'stego_secret.png';
+            const seedLine = settings.randomize ? `\n시드: ${settings.seed || '필수 입력'}` : '';
+            const payload = `이미지: ${fileName}\n키: ${encodePassword.value}\n설정: ${settingsText}${seedLine}`;
+            navigator.clipboard.writeText(payload).then(() => {
+                showToast('공유 텍스트가 복사되었습니다.', 'success');
+            });
+        });
+
+        checksumBtn.addEventListener('click', async () => {
+            if (!encodedImageDataURL) {
+                showToast('체크섬을 계산할 이미지가 없습니다.', 'warning');
+                return;
+            }
+            const response = await fetch(encodedImageDataURL);
+            const buffer = await response.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            checksumText.textContent = `체크섬: ${hashHex}`;
+            showToast('체크섬이 생성되었습니다.', 'success');
         });
 
         // ============================================
@@ -1757,9 +2618,83 @@
             }, 3000);
         }
 
+        function settingsSummary(settings) {
+            const channels = settings.channels.map(ch => ch.toUpperCase()).join('');
+            const randomText = settings.randomize ? '랜덤' : '순차';
+            return `${settings.bitsPerChannel}-LSB · ${channels} · ${randomText}`;
+        }
+
+        function settingsSummaryFromMeta(meta) {
+            const channels = meta.channels || 'RGB';
+            const randomText = meta.randomize ? '랜덤' : '순차';
+            return `${meta.bits}-LSB · ${channels} · ${randomText}`;
+        }
+
+        function applyMetadataToSettings(meta) {
+            if (!meta || !meta.bits || !meta.channels) return;
+            bitDepthGroup.querySelectorAll('.chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.bits === String(meta.bits));
+            });
+            channelGroup.querySelectorAll('.chip').forEach(chip => {
+                chip.classList.toggle('active', meta.channels.includes(chip.dataset.channel.toUpperCase()));
+            });
+            randomizeToggle.checked = !!meta.randomize;
+            updateCapacityDisplay();
+            showToast('숨김 데이터 설정을 적용했습니다. 시드는 직접 입력하세요.', 'success');
+        }
+
+        function loadHistory() {
+            const raw = localStorage.getItem(HISTORY_KEY);
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function saveHistory(history) {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        }
+
+        function addHistoryEntry(entry) {
+            const history = loadHistory();
+            const payload = {
+                ...entry,
+                timestamp: new Date().toLocaleString()
+            };
+            history.unshift(payload);
+            saveHistory(history.slice(0, 10));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const history = loadHistory();
+            historyList.innerHTML = '';
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="helper-text">저장된 기록이 없습니다.</div>';
+                return;
+            }
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <span class="badge">${item.mode.toUpperCase()}</span>
+                    <span>${item.fileName || '-'}</span>
+                    <span>${item.resolution || '-'}</span>
+                    <span>${item.settings || '-'}</span>
+                    <span>${item.timestamp}</span>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        clearHistoryBtn.addEventListener('click', () => {
+            saveHistory([]);
+            renderHistory();
+            showToast('기록을 삭제했습니다.', 'success');
+        });
+
         // Initial state
         updateButtonState();
+        updateByteCount();
+        updateRandomSeedState();
+        renderHistory();
     </script>
 </body>
 </html>
-
