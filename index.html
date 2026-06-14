@@ -799,7 +799,7 @@
         }
 
         .info-list li::before {
-            content: '✓';
+            content: '';
             color: var(--accent-primary);
             font-weight: bold;
         }
@@ -1071,6 +1071,181 @@
             color: var(--accent-primary);
             text-decoration: none;
         }
+    
+
+        /* Minimal light interface override */
+        :root, [data-theme="light"] {
+            --bg-primary: #f7f8f8;
+            --bg-secondary: #f0f2f2;
+            --bg-tertiary: #e7ebeb;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-input: #eef0f1;
+            --text-primary: #111416;
+            --text-secondary: #4f5b61;
+            --text-muted: #7b878c;
+            --accent: #0f766e;
+            --accent-primary: #0f766e;
+            --accent-secondary: #0f766e;
+            --accent-light: #0f766e;
+            --accent-glow: rgba(15, 118, 110, 0.08);
+            --success: #157f3b;
+            --warning: #9a6700;
+            --danger: #b42318;
+            --error: #b42318;
+            --border: #d9dedf;
+            --border-color: #d9dedf;
+            --border-hover: #b8c2c6;
+            --shadow: 0 1px 2px rgba(17, 20, 22, 0.06);
+            --shadow-card: 0 1px 2px rgba(17, 20, 22, 0.06);
+            --gradient-accent: none;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #101314;
+            --bg-secondary: #171b1d;
+            --bg-tertiary: #202628;
+            --bg-card: rgba(24, 28, 30, 0.92);
+            --bg-input: #202628;
+            --text-primary: #f2f4f4;
+            --text-secondary: #b4bdc1;
+            --text-muted: #7f8b91;
+            --accent: #72d6c9;
+            --accent-primary: #72d6c9;
+            --accent-secondary: #72d6c9;
+            --accent-light: #72d6c9;
+            --accent-glow: rgba(114, 214, 201, 0.08);
+            --success: #8bd39a;
+            --warning: #e0b85f;
+            --danger: #ffb4ab;
+            --error: #ffb4ab;
+            --border: #30383c;
+            --border-color: #30383c;
+            --border-hover: #465156;
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.28);
+            --gradient-accent: none;
+        }
+
+        body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        body::before, .logo-icon, .upload-icon, .drop-overlay-icon, .icon:empty, .card-header-icon, .result-icon {
+            display: none !important;
+        }
+
+        .container {
+            max-width: 1120px;
+            padding: 28px 18px;
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 22px;
+            padding-top: 0;
+        }
+
+        h1, .logo h1 {
+            color: var(--text-primary) !important;
+            background: none !important;
+            -webkit-text-fill-color: currentColor !important;
+            font-size: clamp(1.45rem, 3vw, 2.05rem) !important;
+            font-weight: 600 !important;
+            letter-spacing: 0 !important;
+            text-shadow: none !important;
+        }
+
+        .subtitle, .logo span {
+            color: var(--text-secondary) !important;
+            font-size: 0.86rem !important;
+            max-width: 620px;
+            margin-left: 0;
+        }
+
+        .theme-toggle, #theme-toggle, #themeToggle {
+            min-width: 64px;
+            min-height: 34px;
+            width: auto !important;
+            height: 34px !important;
+            border-radius: 8px !important;
+            padding: 0 10px !important;
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-color, var(--border)) !important;
+            color: var(--text-secondary) !important;
+            box-shadow: none !important;
+            transform: none !important;
+            font-size: 0.78rem !important;
+        }
+
+        .card, .panel, .section, .input-panel, .output-panel, .preview-panel,
+        .control-panel, .controls-panel, .options-panel, .settings-panel,
+        .editor-panel, .preview-section, .tool-panel, .qr-card,
+        .generator-card, .scanner-card, .info-section, .stats-panel,
+        .practice-area, .performance-chart, .tips-section, .stat-item,
+        .drop-zone, .upload-zone, .batch-item, .history-item {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-color, var(--border)) !important;
+            border-radius: 10px !important;
+            box-shadow: 0 1px 2px rgba(17, 20, 22, 0.06) !important;
+        }
+
+        .card-header, .panel-header, .section-header, .preview-header {
+            padding: 13px 16px !important;
+            border-bottom: 1px solid var(--border-color, var(--border)) !important;
+        }
+
+        .card-body, .panel-body, .section-body, .controls-panel, .preview-section {
+            padding: 16px !important;
+        }
+
+        button, .btn, .button, .tab, .data-type, .preview-tab,
+        .share-btn, .reset-stats-btn, .retry-btn, .reserve-btn,
+        .download-btn, .action-btn, .copy-btn, .panel-btn {
+            border-radius: 8px !important;
+            box-shadow: none !important;
+            background-image: none !important;
+            transform: none !important;
+            transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease !important;
+        }
+
+        .btn-accent, .btn-primary, .btn-success,
+        .tab.active, .data-type.active, .preview-tab.active,
+        .reserve-btn:not(:disabled), .download-btn, .action-btn.primary {
+            background: var(--accent-primary, var(--accent)) !important;
+            border-color: var(--accent-primary, var(--accent)) !important;
+            color: #fff !important;
+        }
+
+        input, textarea, select, .editor, .preview, .output,
+        .input-area, .output-area, .format-select {
+            background: var(--bg-input, var(--bg-secondary)) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-color, var(--border)) !important;
+            border-radius: 8px !important;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent-primary, var(--accent));
+        }
+
+        .drop-zone, .upload-zone {
+            padding: 42px 22px !important;
+            border-style: dashed !important;
+        }
+
+        .section-title, .panel-title, .card-title, .controls-title, h2, h3 {
+            color: var(--text-primary) !important;
+            letter-spacing: 0 !important;
+        }
+
+        footer {
+            color: var(--text-muted) !important;
+            padding: 22px !important;
+            font-size: 0.78rem !important;
+        }
+
     </style>
 </head>
 <body>
@@ -1084,7 +1259,7 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <button class="theme-toggle" id="themeToggle" title="테마 전환">🌙</button>
+    <button class="theme-toggle" id="themeToggle" title="테마 전환">Light</button>
 
     <canvas id="canvas"></canvas>
 
@@ -1101,11 +1276,11 @@
 
         <div class="mode-tabs" role="tablist" aria-label="모드 선택">
             <button class="mode-tab active" data-mode="encode" role="tab" aria-selected="true" tabindex="0">
-                <span class="icon">📥</span>
+                <span class="icon"></span>
                 <span>메시지 숨기기</span>
             </button>
             <button class="mode-tab" data-mode="decode" role="tab" aria-selected="false" tabindex="-1">
-                <span class="icon">📤</span>
+                <span class="icon"></span>
                 <span>메시지 추출</span>
             </button>
         </div>
@@ -1114,14 +1289,14 @@
             <!-- Left Panel: Image Upload -->
             <div class="card">
                 <div class="card-title">
-                    <span class="icon">🖼️</span>
+                    <span class="icon"></span>
                     이미지 선택
                 </div>
 
                 <div class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="이미지 업로드">
                     <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" multiple>
                     <div class="upload-content">
-                        <div class="upload-icon">📁</div>
+                        <div class="upload-icon"></div>
                         <div class="upload-text">
                             <strong>클릭</strong>하거나 이미지를 <strong>드래그</strong>하세요
                         </div>
@@ -1159,7 +1334,7 @@
                 <div class="file-list" id="fileList" aria-live="polite"></div>
 
                 <button class="btn btn-secondary" id="clearImage" style="margin-top: 1rem; display: none; width: 100%;">
-                    🗑️ 이미지 제거
+                     이미지 제거
                 </button>
 
                 <div class="settings-section" id="stegoSettings">
@@ -1207,14 +1382,14 @@
             <div class="card">
                 <div id="encodePanel">
                     <div class="card-title">
-                        <span class="icon">✏️</span>
+                        <span class="icon"></span>
                         숨길 메시지
                     </div>
 
                     <div class="text-input-wrapper">
                         <label for="secretText">비밀 메시지 입력</label>
-                        <textarea 
-                            id="secretText" 
+                        <textarea
+                            id="secretText"
                             placeholder="여기에 숨기고 싶은 메시지를 입력하세요...&#10;&#10;이 메시지는 AES-256으로 암호화된 후 이미지 픽셀에 숨겨집니다."
                         ></textarea>
                         <div class="char-count" id="charCount">0 / <span id="maxChars">0</span> 문자</div>
@@ -1226,9 +1401,9 @@
                         <div class="password-input-group">
                             <div class="password-field">
                                 <input type="password" id="encodePassword" placeholder="암호화에 사용할 키 입력...">
-                                <button class="password-toggle" id="toggleEncodePassword">👁️</button>
+                                <button class="password-toggle" id="toggleEncodePassword">보기</button>
                             </div>
-                            <button class="btn-generate" id="generateKey" title="랜덤 키 생성">🎲</button>
+                            <button class="btn-generate" id="generateKey" title="랜덤 키 생성">생성</button>
                         </div>
                         <div class="password-strength" id="passwordStrength">
                             <div class="strength-bars">
@@ -1249,14 +1424,14 @@
 
                     <div class="action-buttons">
                         <button class="btn btn-primary" id="encodeBtn" disabled>
-                            🔒 메시지 숨기기
+                             메시지 숨기기
                         </button>
                     </div>
                 </div>
 
                 <div id="decodePanel" style="display: none;">
                     <div class="card-title">
-                        <span class="icon">🔓</span>
+                        <span class="icon"></span>
                         메시지 추출
                     </div>
 
@@ -1265,7 +1440,7 @@
                         <div class="password-input-group">
                             <div class="password-field">
                                 <input type="password" id="decodePassword" placeholder="암호화 시 사용한 키 입력...">
-                                <button class="password-toggle" id="toggleDecodePassword">👁️</button>
+                                <button class="password-toggle" id="toggleDecodePassword">보기</button>
                             </div>
                         </div>
                         <div class="inline-actions">
@@ -1276,10 +1451,10 @@
 
                     <div class="action-buttons">
                         <button class="btn btn-primary" id="decodeBtn" disabled>
-                            🔓 메시지 추출하기
+                             메시지 추출하기
                         </button>
                         <button class="btn btn-secondary" id="verifyBtn" disabled>
-                            🔍 숨김 데이터 검사
+                             숨김 데이터 검사
                         </button>
                     </div>
                     <div class="status-box" id="verifyStatus" style="display: none;"></div>
@@ -1287,10 +1462,10 @@
                     <div class="result-section" id="decodeResult">
                         <div class="result-header">
                             <span class="result-title">
-                                ✅ 추출된 메시지
+                                 추출된 메시지
                             </span>
                             <button class="btn btn-secondary" id="copyDecoded" style="padding: 0.5rem 1rem;">
-                                📋 복사
+                                 복사
                             </button>
                         </div>
                         <div class="decoded-text" id="decodedText"></div>
@@ -1301,7 +1476,7 @@
                 <div class="result-section" id="encodeResult">
                     <div class="result-header">
                         <span class="result-title">
-                            ✅ 인코딩 완료
+                             인코딩 완료
                         </span>
                     </div>
                     <div class="comparison-view">
@@ -1316,7 +1491,7 @@
                     </div>
                     <div class="action-buttons">
                         <button class="btn btn-primary" id="downloadBtn">
-                            💾 이미지 다운로드
+                             이미지 다운로드
                         </button>
                     </div>
                     <div class="settings-section">
@@ -1335,7 +1510,7 @@
 
         <div class="history-panel" id="historyPanel">
             <div class="card-title">
-                <span class="icon">🗂️</span>
+                <span class="icon"></span>
                 최근 작업 기록
             </div>
             <div class="helper-text">최근 10개 작업만 브라우저에 저장됩니다.</div>
@@ -1348,7 +1523,7 @@
         <!-- Info Panel -->
         <div class="info-panel">
             <div class="info-panel-title">
-                💡 보안 정보
+                 보안 정보
             </div>
             <ul class="info-list">
                 <li>모든 암호화 및 스테가노그래피 처리는 브라우저 내에서 이루어집니다</li>
@@ -1361,7 +1536,7 @@
 
         <!-- How It Works -->
         <div class="how-it-works">
-            <h2>🔬 작동 원리</h2>
+            <h2> 작동 원리</h2>
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
@@ -1393,7 +1568,7 @@
 
     <script>
         // ============================================
-        // 🔐 Steganography Vault - Main Application
+        //  Steganography Vault - Main Application
         // ============================================
 
         // Constants
@@ -1461,7 +1636,7 @@
         // Theme Management
         // ============================================
         function initTheme() {
-            const savedTheme = localStorage.getItem('stego-theme') || 'dark';
+            const savedTheme = localStorage.getItem('stego-theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
         }
@@ -1475,7 +1650,7 @@
         }
 
         function updateThemeIcon(theme) {
-            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            themeToggle.textContent = theme === 'dark' ? 'Dark' : 'Light';
         }
 
         themeToggle.addEventListener('click', toggleTheme);
@@ -1500,7 +1675,7 @@
                 document.getElementById('decodePanel').style.display = currentMode === 'decode' ? 'block' : 'none';
                 encodeResult.classList.remove('visible');
                 decodeResult.classList.remove('visible');
-                
+
                 updateButtonState();
             });
         });
@@ -1515,7 +1690,7 @@
                 imageInput.click();
             }
         });
-        
+
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadZone.classList.add('dragover');
@@ -1577,8 +1752,8 @@
                 item.innerHTML = `
                     <span>${file.name} · ${formatBytes(file.size)}</span>
                     <div>
-                        <button data-action="load" data-index="${index}" title="불러오기">📥</button>
-                        <button data-action="remove" data-index="${index}" title="제거">✖</button>
+                        <button data-action="load" data-index="${index}" title="불러오기">불러오기</button>
+                        <button data-action="remove" data-index="${index}" title="제거">제거</button>
                     </div>
                 `;
                 fileList.appendChild(item);
@@ -1622,19 +1797,19 @@
                     imagePreview.src = e.target.result;
                     uploadZone.classList.add('has-image');
                     clearImageBtn.style.display = 'block';
-                    
+
                     // Update canvas
                     canvas.width = img.width;
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0);
                     originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    
+
                     // Update image info
                     updateImageInfo(file, img);
                     encodeResult.classList.remove('visible');
                     decodeResult.classList.remove('visible');
                     verifyStatus.style.display = 'none';
-                    
+
                     updateButtonState();
                 };
                 img.src = e.target.result;
@@ -1673,8 +1848,8 @@
             checksumText.textContent = '체크섬: -';
             encodePassword.type = 'password';
             decodePassword.type = 'password';
-            document.getElementById('toggleEncodePassword').textContent = '👁️';
-            document.getElementById('toggleDecodePassword').textContent = '👁️';
+            document.getElementById('toggleEncodePassword').textContent = '보기';
+            document.getElementById('toggleDecodePassword').textContent = '보기';
             updatePasswordStrength('');
             updateByteCount();
         }
@@ -1684,7 +1859,7 @@
             document.getElementById('fileSize').textContent = formatBytes(file.size);
             document.getElementById('resolution').textContent = `${img.width} × ${img.height}`;
             metadataInfo.textContent = file.type === 'image/jpeg' ? 'JPEG는 EXIF 포함 가능' : 'PNG/WebP는 메타데이터 제한적';
-            
+
             updateCapacityDisplay();
             imageInfo.classList.add('visible');
         }
@@ -1789,14 +1964,14 @@
         secretText.addEventListener('input', () => {
             const length = secretText.value.length;
             const max = parseInt(maxCharsSpan.textContent.replace(/,/g, '')) || 0;
-            
+
             charCount.textContent = `${length.toLocaleString()} / ${maxCharsSpan.textContent} 문자`;
             updateByteCount();
-            
+
             if (max > 0) {
                 const percentage = (length / max) * 100;
                 document.getElementById('capacityFill').style.width = `${Math.min(percentage, 100)}%`;
-                
+
                 charCount.classList.remove('warning', 'error');
                 if (percentage > 90) {
                     charCount.classList.add('error');
@@ -1804,7 +1979,7 @@
                     charCount.classList.add('warning');
                 }
             }
-            
+
             updateButtonState();
         });
 
@@ -1822,10 +1997,10 @@
         function togglePasswordVisibility(input, button) {
             if (input.type === 'password') {
                 input.type = 'text';
-                button.textContent = '🙈';
+                button.textContent = input.type === 'password' ? '보기' : '숨김';
             } else {
                 input.type = 'password';
-                button.textContent = '👁️';
+                button.textContent = input.type === 'password' ? '보기' : '숨김';
             }
         }
 
@@ -1844,25 +2019,25 @@
                 document.getElementById('str4')
             ];
             const strengthText = document.getElementById('strengthText');
-            
+
             // Reset
             bars.forEach(bar => bar.className = 'strength-bar');
-            
+
             if (!password) {
                 strengthText.textContent = '-';
                 return;
             }
-            
+
             let strength = 0;
             if (password.length >= 8) strength++;
             if (password.length >= 12) strength++;
             if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
             if (/[0-9]/.test(password)) strength++;
             if (/[^A-Za-z0-9]/.test(password)) strength++;
-            
+
             const levels = ['', 'weak', 'weak', 'medium', 'strong', 'strong'];
             const texts = ['', '매우 약함', '약함', '보통', '강함', '매우 강함'];
-            
+
             for (let i = 0; i < Math.min(strength, 4); i++) {
                 bars[i].classList.add(levels[strength]);
             }
@@ -1876,10 +2051,10 @@
             const key = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
             encodePassword.value = key;
             encodePassword.type = 'text';
-            document.getElementById('toggleEncodePassword').textContent = '🙈';
+            document.getElementById('toggleEncodePassword').textContent = '보기';
             updatePasswordStrength(key);
             updateButtonState();
-            
+
             // Copy to clipboard
             navigator.clipboard.writeText(key).then(() => {
                 showToast('랜덤 키가 생성되어 클립보드에 복사되었습니다!', 'success');
@@ -1944,7 +2119,7 @@
             const hasText = secretText.value.trim().length > 0;
             const hasEncodePassword = encodePassword.value.length > 0;
             const hasDecodePassword = decodePassword.value.length > 0;
-            
+
             encodeBtn.disabled = !(hasImage && hasText && hasEncodePassword);
             decodeBtn.disabled = !(hasImage && hasDecodePassword);
             verifyBtn.disabled = !hasImage;
@@ -2382,44 +2557,44 @@
                 if (!settings.stripMetadata) {
                     showToast('브라우저 저장은 메타데이터를 유지할 수 없습니다.', 'warning');
                 }
-                
+
                 // Encrypt the message
                 updateLoading('AES-256 암호화 중...', 20);
                 await delay(100);
                 const encrypted = encryptAES(text, password);
                 const payload = buildPayload(encrypted, settings);
-                
+
                 // Create a copy of the image data
                 updateLoading('이미지 데이터 준비 중...', 40);
                 await delay(100);
                 ctx.drawImage(currentImage, 0, 0);
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                
+
                 // Encode the data
                 updateLoading('LSB 스테가노그래피 처리 중...', 60);
                 await delay(100);
                 const encodedData = settings.useWorker
                     ? await runWorkerTask({ type: 'encode', imageData, payload, settings })
                     : encodeDataInImage(imageData, payload, settings);
-                
+
                 // Put the modified data back
                 updateLoading('이미지 생성 중...', 80);
                 await delay(100);
                 ctx.putImageData(encodedData, 0, 0);
-                
+
                 // Convert to PNG
                 encodedImageDataURL = canvas.toDataURL('image/png');
-                
+
                 // Show comparison
                 updateLoading('완료!', 100);
                 await delay(200);
-                
+
                 document.getElementById('originalCompare').src = imagePreview.src;
                 document.getElementById('encodedCompare').src = encodedImageDataURL;
                 encodeResult.classList.add('visible');
 
                 checksumText.textContent = '체크섬: -';
-                
+
                 hideLoading();
                 showToast('메시지가 성공적으로 숨겨졌습니다!', 'success');
 
@@ -2429,7 +2604,7 @@
                     resolution: document.getElementById('resolution').textContent,
                     settings: settingsSummary(settings)
                 });
-                
+
             } catch (error) {
                 hideLoading();
                 showToast(error.message, 'error');
@@ -2447,13 +2622,13 @@
                 if (settings.randomize && !settings.seed) {
                     throw new Error('랜덤화 시드를 입력해주세요.');
                 }
-                
+
                 // Get image data
                 updateLoading('이미지 분석 중...', 30);
                 await delay(100);
                 ctx.drawImage(currentImage, 0, 0);
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                
+
                 // Extract the data
                 updateLoading('LSB 데이터 추출 중...', 60);
                 await delay(100);
@@ -2464,19 +2639,19 @@
                 if (parsed.meta) {
                     applyMetadataToSettings(parsed.meta);
                 }
-                
+
                 // Decrypt
                 updateLoading('AES-256 복호화 중...', 90);
                 await delay(100);
                 const decrypted = decryptAES(parsed.encrypted, password);
-                
+
                 // Show result
                 updateLoading('완료!', 100);
                 await delay(200);
-                
+
                 document.getElementById('decodedText').textContent = decrypted;
                 decodeResult.classList.add('visible');
-                
+
                 hideLoading();
                 showToast('메시지가 성공적으로 추출되었습니다!', 'success');
 
@@ -2486,7 +2661,7 @@
                     resolution: document.getElementById('resolution').textContent,
                     settings: settingsSummary(settings)
                 });
-                
+
             } catch (error) {
                 hideLoading();
                 showToast(error.message, 'error');
@@ -2504,12 +2679,12 @@
         // Download encoded image
         downloadBtn.addEventListener('click', () => {
             if (!encodedImageDataURL) return;
-            
+
             const link = document.createElement('a');
             link.download = 'stego_secret.png';
             link.href = encodedImageDataURL;
             link.click();
-            
+
             showToast('이미지가 다운로드되었습니다!', 'success');
         });
 
@@ -2609,20 +2784,20 @@
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
+
             const icons = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️'
+                success: '',
+                error: '',
+                warning: ''
             };
-            
+
             toast.innerHTML = `
                 <span class="toast-icon">${icons[type]}</span>
                 <span class="toast-message">${message}</span>
             `;
-            
+
             container.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(100%)';
