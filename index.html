@@ -30,7 +30,7 @@
             --shadow-glow: none;
         }
 
-        [data-theme="light"] {
+        :root {
             --bg-primary: #f2f5f2;
             --bg-secondary: #ffffff;
             --bg-tertiary: #e9efe9;
@@ -60,92 +60,7 @@
             line-height: 1.6;
             transition: background 0.2s ease, color 0.2s ease;
         }
-
-        /* Background Pattern */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(0deg, rgba(90, 140, 110, 0.08) 0, rgba(90, 140, 110, 0.08) 1px, transparent 1px, transparent 24px),
-                repeating-linear-gradient(90deg, rgba(90, 140, 110, 0.08) 0, rgba(90, 140, 110, 0.08) 1px, transparent 1px, transparent 24px);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-top: 1rem;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: transparent;
-            border-radius: 6px;
-            border: 1px solid var(--accent-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--accent-primary);
-        }
-
-        h1 {
-            font-size: 2.1rem;
-            font-weight: 600;
-            color: var(--accent-primary);
-            letter-spacing: 0.5px;
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            z-index: 100;
-        }
-
-        .theme-toggle:hover {
-            border-color: var(--accent-primary);
-        }
-
-        /* Mode Tabs */
+/* Mode Tabs */
         .mode-tabs {
             display: flex;
             justify-content: center;
@@ -1074,7 +989,7 @@
     
 
         /* Minimal light interface override */
-        :root, [data-theme="light"] {
+        :root, :root {
             --bg-primary: #f7f8f8;
             --bg-secondary: #f0f2f2;
             --bg-tertiary: #e7ebeb;
@@ -1100,33 +1015,7 @@
             --gradient-accent: none;
         }
 
-        [data-theme="dark"] {
-            --bg-primary: #101314;
-            --bg-secondary: #171b1d;
-            --bg-tertiary: #202628;
-            --bg-card: rgba(24, 28, 30, 0.92);
-            --bg-input: #202628;
-            --text-primary: #f2f4f4;
-            --text-secondary: #b4bdc1;
-            --text-muted: #7f8b91;
-            --accent: #72d6c9;
-            --accent-primary: #72d6c9;
-            --accent-secondary: #72d6c9;
-            --accent-light: #72d6c9;
-            --accent-glow: rgba(114, 214, 201, 0.08);
-            --success: #8bd39a;
-            --warning: #e0b85f;
-            --danger: #ffb4ab;
-            --error: #ffb4ab;
-            --border: #30383c;
-            --border-color: #30383c;
-            --border-hover: #465156;
-            --shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
-            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.28);
-            --gradient-accent: none;
-        }
-
-        body {
+body {
             background: var(--bg-primary) !important;
             color: var(--text-primary);
             line-height: 1.5;
@@ -1164,22 +1053,7 @@
             margin-left: 0;
         }
 
-        .theme-toggle, #theme-toggle, #themeToggle {
-            min-width: 64px;
-            min-height: 34px;
-            width: auto !important;
-            height: 34px !important;
-            border-radius: 8px !important;
-            padding: 0 10px !important;
-            background: var(--bg-card) !important;
-            border: 1px solid var(--border-color, var(--border)) !important;
-            color: var(--text-secondary) !important;
-            box-shadow: none !important;
-            transform: none !important;
-            font-size: 0.78rem !important;
-        }
-
-        .card, .panel, .section, .input-panel, .output-panel, .preview-panel,
+.card, .panel, .section, .input-panel, .output-panel, .preview-panel,
         .control-panel, .controls-panel, .options-panel, .settings-panel,
         .editor-panel, .preview-section, .tool-panel, .qr-card,
         .generator-card, .scanner-card, .info-section, .stats-panel,
@@ -1249,32 +1123,7 @@
     </style>
     <!-- Minimal sharp visual system -->
     <style id="minimal-sharp-theme">
-        :root, [data-theme="light"], [data-theme="dark"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #ffffff;
-            --bg-card: #ffffff;
-            --bg-card-hover: #ffffff;
-            --bg-input: #ffffff;
-            --bg: #ffffff;
-            --panel: #ffffff;
-            --panel-strong: #ffffff;
-            --preview-bg: #ffffff;
-            --accent: #D2E0E5;
-            --accent-primary: #D2E0E5;
-            --accent-secondary: #D2E0E5;
-            --accent-light: #D2E0E5;
-            --accent-strong: #D2E0E5;
-            --accent-dim: #D2E0E5;
-            --primary: #D2E0E5;
-            --primary-color: #D2E0E5;
-            --gradient-accent: none;
-            --gradient-1: none;
-            --gradient-2: none;
-            --gradient-3: none;
-        }
-
-        html, body {
+html, body {
             background: #ffffff !important;
         }
 
@@ -1299,42 +1148,7 @@
     </style>
     <!-- Rational project palette -->
     <style id="rational-project-palette">
-        :root, [data-theme="light"], [data-theme="dark"] {
-            --bg-primary: #FFFFFF;
-            --bg-secondary: #F4F8F5;
-            --bg-tertiary: #F4F8F5;
-            --bg-card: #FFFFFF;
-            --bg-card-hover: #F4F8F5;
-            --bg-input: #EEF5F0;
-            --bg: #FFFFFF;
-            --panel: #FFFFFF;
-            --panel-strong: #F4F8F5;
-            --preview-bg: #F4F8F5;
-            --text-primary: #1F2922;
-            --text-secondary: #68766D;
-            --text-muted: #68766D;
-            --border: #D8E3DA;
-            --border-color: #D8E3DA;
-            --border-hover: #638A70;
-            --accent: #638A70;
-            --accent-primary: #638A70;
-            --accent-secondary: #477052;
-            --accent-light: #F4F8F5;
-            --accent-strong: #477052;
-            --accent-dim: #F4F8F5;
-            --primary: #638A70;
-            --primary-color: #638A70;
-            --success: #3F7D58;
-            --warning: #9B773C;
-            --danger: #A65A5A;
-            --error: #A65A5A;
-            --gradient-accent: none;
-            --gradient-1: none;
-            --gradient-2: none;
-            --gradient-3: none;
-        }
-
-        html, body {
+html, body {
             background: #FFFFFF !important;
             color: #1F2922 !important;
         }
@@ -1357,42 +1171,7 @@
     </style>
     <!-- MarkdownPreview shared visual system -->
     <style id="markdown-preview-theme">
-        :root, [data-theme="light"], [data-theme="dark"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f6f8fa;
-            --bg-tertiary: #f6f8fa;
-            --bg-card: #ffffff;
-            --bg-card-hover: #f6f8fa;
-            --bg-editor: #ffffff;
-            --bg-input: #f6f8fa;
-            --bg: #ffffff;
-            --panel: #ffffff;
-            --panel-strong: #f6f8fa;
-            --preview-bg: #f6f8fa;
-            --accent: #0969da;
-            --accent-primary: #0969da;
-            --accent-secondary: #0550ae;
-            --accent-light: #f6f8fa;
-            --accent-strong: #0550ae;
-            --primary: #0969da;
-            --primary-color: #0969da;
-            --text-primary: #24292f;
-            --text-secondary: #57606a;
-            --text-muted: #8c959f;
-            --border: #d0d7de;
-            --border-color: #d0d7de;
-            --border-hover: #0969da;
-            --code-bg: #f6f8fa;
-            --blockquote-border: #0969da;
-            --link-color: #0969da;
-            --table-border: #d0d7de;
-            --table-alt-bg: #f6f8fa;
-            --gradient-accent: linear-gradient(135deg, #0969da 0%, #0550ae 100%);
-            --shadow: 0 1px 2px rgba(27, 31, 36, 0.08);
-            --shadow-card: 0 1px 2px rgba(27, 31, 36, 0.08);
-        }
-
-        html, body {
+html, body {
             background: #ffffff !important;
             color: #24292f !important;
         }
@@ -1448,6 +1227,45 @@
 
         a, .link { color: #0969da !important; }
         a:hover, .link:hover { color: #0550ae !important; }
+
+        body {
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1320px;
+            padding: 1.25rem;
+        }
+
+        header {
+            margin-bottom: 1.5rem;
+        }
+
+        .main-content {
+            gap: 1rem;
+        }
+
+        .card {
+            padding: 1.25rem;
+        }
+
+        .mode-tabs {
+            gap: 0.5rem;
+        }
+
+        .mode-tab {
+            min-height: 38px;
+            padding: 0.65rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .upload-zone {
+            padding: 2rem 1.25rem;
+        }
+
+        .history-panel {
+            padding: 1.25rem;
+        }
     </style>
 </head>
 <body>
@@ -1460,8 +1278,6 @@
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
-
-    <button class="theme-toggle" id="themeToggle" title="테마 전환">Light</button>
 
     <canvas id="canvas"></canvas>
 
@@ -1814,7 +1630,6 @@
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
         const loadingProgress = document.getElementById('loadingProgress');
-        const themeToggle = document.getElementById('themeToggle');
         const bitDepthGroup = document.getElementById('bitDepthGroup');
         const channelGroup = document.getElementById('channelGroup');
         const randomizeToggle = document.getElementById('randomizeToggle');
@@ -1833,30 +1648,6 @@
         const checksumText = document.getElementById('checksumText');
         const historyList = document.getElementById('historyList');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-
-        // ============================================
-        // Theme Management
-        // ============================================
-        function initTheme() {
-            const savedTheme = localStorage.getItem('stego-theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('stego-theme', next);
-            updateThemeIcon(next);
-        }
-
-        function updateThemeIcon(theme) {
-            themeToggle.textContent = theme === 'dark' ? 'Dark' : 'Light';
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-        initTheme();
 
         // ============================================
         // Mode Switching
