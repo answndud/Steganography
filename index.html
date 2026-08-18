@@ -1246,6 +1246,102 @@
             font-size: 0.78rem !important;
         }
 
+        /* Sharp monochrome interface */
+        :root, [data-theme="light"], [data-theme="dark"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f3f5f5;
+            --bg-card: #ffffff;
+            --bg-input: #f3f5f5;
+            --text-primary: #111516;
+            --text-secondary: #4b5659;
+            --text-muted: #778285;
+            --accent: #007a70;
+            --accent-primary: #007a70;
+            --accent-secondary: #005e57;
+            --accent-glow: rgba(0, 122, 112, 0.12);
+            --success: #087443;
+            --warning: #9a5b00;
+            --error: #b42318;
+            --border: #c8d0d1;
+            --border-color: #c8d0d1;
+            --border-hover: #007a70;
+        }
+
+        *, *::before, *::after {
+            border-radius: 0 !important;
+        }
+
+        body {
+            background: #ffffff !important;
+            color: var(--text-primary) !important;
+        }
+
+        body::before {
+            display: none !important;
+        }
+
+        .container {
+            padding-top: 34px;
+        }
+
+        .theme-toggle,
+        .mode-tab,
+        .small-btn,
+        .btn-generate,
+        .btn,
+        .chip {
+            border-width: 1px !important;
+        }
+
+        .theme-toggle:hover,
+        .mode-tab:hover,
+        .small-btn:hover,
+        .btn-generate:hover,
+        .btn-secondary:hover,
+        .upload-zone:hover,
+        .upload-zone.dragover,
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent-primary) !important;
+        }
+
+        .mode-tab.active,
+        .chip.active,
+        .btn-primary {
+            background: var(--accent-primary) !important;
+            border-color: var(--accent-primary) !important;
+            color: #ffffff !important;
+        }
+
+        .upload-zone {
+            border-style: dashed !important;
+            background: #ffffff !important;
+        }
+
+        .card,
+        .history-panel,
+        .how-it-works,
+        .info-panel,
+        .settings-section,
+        .toast {
+            box-shadow: 3px 3px 0 rgba(17, 21, 22, 0.08) !important;
+        }
+
+        .card-title,
+        .result-title,
+        .info-panel-title,
+        h1,
+        h2,
+        h3 {
+            letter-spacing: -0.02em !important;
+        }
+
+        .loading-spinner {
+            border-radius: 0 !important;
+            animation: spin 1s steps(8, end) infinite;
+        }
+
     </style>
 </head>
 <body>
