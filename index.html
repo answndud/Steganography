@@ -1342,6 +1342,52 @@
             animation: spin 1s steps(8, end) infinite;
         }
 
+        /* Enforce the minimal sharp system on every rendered component. */
+        html,
+        body,
+        body *,
+        body *::before,
+        body *::after {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .card,
+        .mode-tab,
+        .mode-tab.active,
+        .theme-toggle,
+        .upload-zone,
+        .image-info,
+        .file-item,
+        .settings-section,
+        .chip,
+        .small-btn,
+        .status-box,
+        .history-panel,
+        .history-item,
+        .badge,
+        textarea,
+        input,
+        select,
+        .password-field input,
+        .btn-generate,
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .comparison-item img,
+        .decoded-text,
+        .info-panel,
+        .how-it-works,
+        .binary-viz,
+        .pixel-preview,
+        .toast,
+        .loading-progress,
+        .loading-spinner,
+        .step-number {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
     </style>
 </head>
 <body>
